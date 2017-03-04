@@ -1,0 +1,17 @@
+group = 'uk.co.deliverymind'
+version = sauceReportingGradlePluginVersion
+
+apply plugin: 'groovy'
+
+test {
+    outputs.upToDateWhen { false }
+}
+
+dependencies {
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'org.seleniumhq.selenium:selenium-java:2.53.0'
+}
+
+repositories {
+    mavenCentral()
+}
