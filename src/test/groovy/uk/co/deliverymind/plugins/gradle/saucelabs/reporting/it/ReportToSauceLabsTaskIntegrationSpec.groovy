@@ -9,7 +9,7 @@ import static org.gradle.internal.impldep.org.hamcrest.core.Is.is
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class ReportToSauceLabsTaskSpec extends Specification {
+class ReportToSauceLabsTaskIntegrationSpec extends Specification {
 
     // TODO: GradleCompatibilityTest
 

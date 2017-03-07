@@ -9,6 +9,8 @@ apply plugin: 'signing'
 
 test {
     outputs.upToDateWhen { false }
+
+    // TODO: move to spec and make visible in stdout
     doFirst {
         println "\nThis task takes a while to execute, due to Gradle compatibility tests and integration tests with Sauce Labs. Subsequent executions will be significantly faster but still time consuming.\n"
     }
@@ -19,6 +21,8 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.4'
     compile 'com.saucelabs:saucerest:1.0.35'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile "cglib:cglib:2.2"
+    testCompile "org.objenesis:objenesis:2.5.1"
 }
 
 repositories {
