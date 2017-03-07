@@ -34,14 +34,17 @@ class SessionHandler {
 
     void handleSessionStatusUpdate(Boolean currentSessionResult, JUnitTestReport testReport) {
         if (currentSessionResult != testReport.passed) {
-            // TODO: enum
             String message = "\nSession '${testReport.sessionId}' for ${testReport.filename} was not updated\nStatus in Sauce Labs: ${currentSessionResult}\nExpected status: ${testReport.passed}\n"
-            if (cfg.actionOnFailure == 'warning') {
-                logger.warn(message)
-            } else if (cfg.actionOnFailure == 'error') {
-                throw new GradleException(message)
-            } else if (cfg.actionOnFailure == 'quiet') {
-                println message
+            switch(cfg.actionOnFailure) {
+                case ActionOnFailure.WARNING:
+                    logger.warn(message)
+                    break
+                case ActionOnFailure.ERROR:
+                    throw new GradleException(message)
+                    break
+                case ActionOnFailure.QUIET:
+                    println message
+                    break
             }
         }
     }

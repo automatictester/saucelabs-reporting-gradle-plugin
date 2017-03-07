@@ -40,7 +40,7 @@ class SessionHandlerSpec extends Specification {
         testReport.filename >> FILENAME
 
         and: 'Plugin extension is configured'
-        cfg.actionOnFailure >> 'warning'
+        cfg.actionOnFailure >> ActionOnFailure.WARNING
 
         when: 'Sauce session status is compared with session status in JUnit report'
         sessionHandler.handleSessionStatusUpdate(sauceResult, testReport)
@@ -86,16 +86,16 @@ class SessionHandlerSpec extends Specification {
         sessionHandler.handleSessionStatusUpdate(sauceResult, testReport)
 
         then: 'Expected action takes place'
-        if (actionOnFailure == 'ignore') {
+        if (ActionOnFailure.QUIET) {
             out.contains(MESSAGE)
-        } else if (actionOnFailure == 'warning') {
+        } else if (ActionOnFailure.WARNING) {
             1 * sessionHandler.logger.warn(MESSAGE)
         }
 
         where:
-        actionOnFailure | sauceResult | reportResult
-        'quiet'         | true        | false
-        'warning'       | true        | false
+        actionOnFailure         | sauceResult | reportResult
+        ActionOnFailure.QUIET   | true        | false
+        ActionOnFailure.WARNING | true        | false
     }
 
     def 'Should handle results inconsistency correctly for actionOnFailure set to error'() {
@@ -110,7 +110,7 @@ class SessionHandlerSpec extends Specification {
         testReport.passed >> false
 
         and: 'Plugin extension is configured'
-        cfg.actionOnFailure >> 'error'
+        cfg.actionOnFailure >> ActionOnFailure.ERROR
 
         when: 'System output is intercepted'
 
