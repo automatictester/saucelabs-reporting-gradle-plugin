@@ -9,5 +9,5 @@ class SaucelabsReportingExtension {
     String testResultsDir
     String user
     String key
-    ActionOnFailure actionOnFailure = ActionOnFailure.QUIET
+    ActionOnFailure actionOnFailure = ActionOnFailure.WARNING
 }

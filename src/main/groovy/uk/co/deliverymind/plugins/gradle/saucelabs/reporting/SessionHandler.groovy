@@ -3,13 +3,10 @@ package uk.co.deliverymind.plugins.gradle.saucelabs.reporting
 import com.saucelabs.saucerest.SauceREST
 import groovy.json.JsonSlurper
 import org.gradle.api.GradleException
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension
 
 class SessionHandler {
 
-    Logger logger = LoggerFactory.getLogger(SessionHandler.class)
     SaucelabsReportingExtension cfg
 
     SessionHandler(SaucelabsReportingExtension cfg) {
@@ -36,13 +33,10 @@ class SessionHandler {
         if (currentSessionResult != testReport.passed) {
             String message = "\nSession '${testReport.sessionId}' for ${testReport.filename} was not updated\nStatus in Sauce Labs: ${currentSessionResult}\nExpected status: ${testReport.passed}\n"
             switch(cfg.actionOnFailure) {
-                case ActionOnFailure.WARNING:
-                    logger.warn(message)
-                    break
                 case ActionOnFailure.ERROR:
                     throw new GradleException(message)
                     break
-                case ActionOnFailure.QUIET:
+                case ActionOnFailure.WARNING:
                     println message
                     break
             }

@@ -1,10 +1,7 @@
 package uk.co.deliverymind.plugins.gradle.saucelabs.reporting.task
 
-import com.saucelabs.saucerest.SauceREST
 import groovy.io.FileType
-import groovy.json.JsonSlurper
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.JUnitTestReport
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.SessionHandler
@@ -29,6 +26,7 @@ class ReportToSauceLabsTask extends DefaultTask {
         }
     }
 
+    // TODO: extract to FileHandler class
     static List<String> getAllFiles(String directory) {
         def files = []
         File dir = new File(directory)
