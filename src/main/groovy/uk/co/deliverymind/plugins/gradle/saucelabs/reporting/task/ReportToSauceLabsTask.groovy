@@ -1,8 +1,8 @@
 package uk.co.deliverymind.plugins.gradle.saucelabs.reporting.task
 
-import groovy.io.FileType
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.JUnitReportHandler
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.JUnitTestReport
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.SessionHandler
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension
@@ -13,30 +13,14 @@ import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.extension.Saucelabs
 
 class ReportToSauceLabsTask extends DefaultTask {
 
-    SaucelabsReportingExtension cfg = project.extensions.findByType(SaucelabsReportingExtension.class)
-
     @TaskAction
     void reportToSauceLabs() {
-        List<String> files = getAllFiles(cfg.testResultsDir)
-        List<String> junitReportFiles = filterFiles(files, cfg.filenamePattern)
+        SaucelabsReportingExtension cfg = project.extensions.findByType(SaucelabsReportingExtension.class)
+        List<String> junitReports = JUnitReportHandler.getJUnitReports(cfg.testResultsDir, cfg.filenamePattern)
 
-        junitReportFiles.each {
+        junitReports.each {
             JUnitTestReport testReport = new JUnitTestReport(it)
             new SessionHandler(cfg).updateSessionResult(testReport)
         }
-    }
-
-    // TODO: extract to FileHandler class
-    static List<String> getAllFiles(String directory) {
-        def files = []
-        File dir = new File(directory)
-        dir.eachFileRecurse(FileType.FILES) { file ->
-            files << file.path
-        }
-        files
-    }
-
-    static List<String> filterFiles(List<String> files, String pattern) {
-        files.findAll { it =~ pattern }
     }
 }
