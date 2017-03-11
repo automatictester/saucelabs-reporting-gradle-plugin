@@ -1,0 +1,28 @@
+package load
+
+plugins {
+    id 'uk.co.deliverymind.saucelabs-reporting'
+}
+
+apply plugin: 'groovy'
+
+test {
+    outputs.upToDateWhen { false }
+    systemProperties System.properties
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'org.seleniumhq.selenium:selenium-java:2.53.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+saucelabsReportingSettings {
+    testResultsDir = 'src/test/resources/load/build/test-results'
+    user = System.properties.SL_USER
+    key = System.properties.SL_KEY
+}

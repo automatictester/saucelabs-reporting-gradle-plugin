@@ -1,0 +1,105 @@
+group = 'uk.co.deliverymind'
+version = sauceReportingGradlePluginVersion
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'signing'
+
+test {
+    outputs.upToDateWhen { false }
+    doFirst {
+        println "\nThis task takes a while to execute, due to Gradle compatibility tests and integration tests with Sauce Labs. Subsequent executions will be significantly faster but still time consuming.\n"
+    }
+    systemProperties System.properties
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    compile 'com.saucelabs:saucerest:1.0.35'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile "cglib:cglib:2.2"
+    testCompile "org.objenesis:objenesis:2.5.1"
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId group
+            artifactId 'saucelabs-reporting-gradle-plugin'
+            version sauceReportingGradlePluginVersion
+
+            from components.java
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                group group
+                name 'saucelabs-reporting-gradle-plugin'
+                version sauceReportingGradlePluginVersion
+                packaging 'jar'
+                description 'Gradle plugin for reporting test results to Sauce Labs'
+                url 'http://deliverymind.github.io/saucelabs-reporting-gradle-plugin'
+
+                scm {
+                    connection 'scm:git:git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git'
+                    developerConnection 'scm:git:git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git'
+                    url 'git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        name 'Irek Pastusiak'
+                        email 'irek@deliverymind.co.uk'
+                        organizationUrl 'https://github.com/deliverymind'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
