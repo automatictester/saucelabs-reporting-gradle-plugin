@@ -25,6 +25,7 @@ class JUnitTestReport {
     }
 
     void log() {
+        println 'Processing session:'
         println "Filename:  ${filename}"
         println "SessionId: ${sessionId}"
         println "Passed:    ${passed}"
