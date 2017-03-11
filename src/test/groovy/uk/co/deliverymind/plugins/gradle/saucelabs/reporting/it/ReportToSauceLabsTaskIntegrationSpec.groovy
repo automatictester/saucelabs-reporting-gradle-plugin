@@ -1,6 +1,7 @@
 package uk.co.deliverymind.plugins.gradle.saucelabs.reporting.it
 
 import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -14,6 +15,7 @@ import static org.gradle.internal.impldep.org.hamcrest.MatcherAssert.assertThat
 import static org.gradle.internal.impldep.org.hamcrest.core.Is.is
 import static org.gradle.testkit.runner.TaskOutcome.FAILED
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
 
 class ReportToSauceLabsTaskIntegrationSpec extends Specification {
 
@@ -23,7 +25,7 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         given: 'There is a project configured to use saucelabs-reporting plugin'
         GradleRunner runner = GradleRunner.create()
                 .withGradleVersion(version)
-                .withProjectDir(new File('src/test/resources'))
+                .withProjectDir(new File('src/test/resources/it'))
                 .withPluginClasspath()
 
         when: 'clean task is run'
@@ -33,7 +35,7 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         println cleanResult.output
 
         then: 'clean task ends with status success'
-        assertThat(cleanResult.task(':clean').getOutcome(), is(SUCCESS))
+        assertThat(isTaskSuccessOrUpToDate(cleanResult.task(':clean')), is(true))
 
         when: 'test task is run'
         BuildResult testResult = runner
@@ -42,7 +44,8 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         println testResult.output
 
         then: 'test task ends with status failed'
-        assertThat(testResult.task(':test').getOutcome(), is(FAILED))
+        assertThat(testResult.task(':test').outcome, is(FAILED))
+        assertThat(testResult.output.contains('3 tests completed, 1 failed'), is(true))
 
         when: 'reportToSauceLabs task is run'
         BuildResult reportResult = runner
@@ -51,10 +54,10 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         println reportResult.output
 
         then: 'reportToSauceLabs task ends with status success'
-        assertThat(reportResult.task(':reportToSauceLabs').getOutcome(), is(SUCCESS))
+        assertThat(reportResult.task(':reportToSauceLabs').outcome, is(SUCCESS))
 
         cleanup: 'Sauce Labs sessions created by this integration test are deleted'
-        List<String> junitReportFiles = JUnitReportHandler.getJUnitReports('src/test/resources/build/test-results', /TEST-(.)*\.xml/)
+        List<String> junitReportFiles = JUnitReportHandler.getJUnitReports('src/test/resources/it/build/test-results', /TEST-(.)*\.xml/)
 
         junitReportFiles.each {
             JUnitTestReport testReport = new JUnitTestReport(it)
@@ -63,5 +66,9 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
 
         where: 'Gradle versions'
         version << ['2.8', '2.14', '3.0', '3.4.1']
+    }
+
+    boolean isTaskSuccessOrUpToDate(BuildTask task) {
+        (task.outcome == SUCCESS) || (task.outcome == UP_TO_DATE)
     }
 }

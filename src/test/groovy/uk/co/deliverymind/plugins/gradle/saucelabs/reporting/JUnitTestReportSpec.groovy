@@ -8,7 +8,7 @@ class JUnitTestReportSpec extends Specification {
     @Unroll("Should set test status to #passed - failures: #failures, errors: #errors")
     def "Should set test status to #passed - failures: #failures, errors: #errors"() {
         given: 'Fake JUnit test report is loaded'
-        JUnitTestReport report = new JUnitTestReport('src/test/resources/TEST-FakeTest.xml')
+        JUnitTestReport report = new JUnitTestReport('src/test/resources/unit/TEST-FakeTest.xml')
 
         when: 'We override test results'
         report.setPassed(failures, errors)
@@ -17,7 +17,7 @@ class JUnitTestReportSpec extends Specification {
         report.passed == passed
 
         and: 'All other values also match'
-        report.filename == 'src/test/resources/TEST-FakeTest.xml'
+        report.filename == 'src/test/resources/unit/TEST-FakeTest.xml'
         report.sessionId == 'xyz'
 
         where:
