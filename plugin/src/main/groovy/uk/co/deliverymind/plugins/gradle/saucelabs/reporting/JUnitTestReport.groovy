@@ -25,9 +25,12 @@ class JUnitTestReport {
     }
 
     void log() {
+        String time = new Date().format("HH:mm:ss:SSS")
+
         println 'Processing session:'
-        println "Filename:  ${filename}"
-        println "SessionId: ${sessionId}"
-        println "Passed:    ${passed}"
+        println "Current time: ${time}"
+        println "Filename:     ${filename}"
+        println "SessionId:    ${sessionId}"
+        println "Passed:       ${passed}"
     }
 }
