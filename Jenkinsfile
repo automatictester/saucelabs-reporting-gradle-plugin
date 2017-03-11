@@ -29,7 +29,7 @@ def test() {
 }
 
 def runITs() {
-    sh "./gradlew :plugin-it:clean :plugin-it:test :plugin-it:reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
+//    sh "./gradlew :plugin-it:clean :plugin-it:test :plugin-it:reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
 }
 
 def tagRelease() {
