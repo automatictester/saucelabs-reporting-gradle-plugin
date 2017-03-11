@@ -1,5 +1,3 @@
-package it.src.test.groovy
-
 class PassTest extends BaseTest {
 
     def setupSpec() {
