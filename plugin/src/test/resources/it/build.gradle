@@ -1,5 +1,3 @@
-package it
-
 plugins {
     id 'uk.co.deliverymind.saucelabs-reporting'
 }
