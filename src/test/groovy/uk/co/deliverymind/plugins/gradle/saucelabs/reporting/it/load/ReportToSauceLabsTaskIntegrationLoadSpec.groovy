@@ -4,14 +4,14 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
-import spock.lang.Unroll
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.JUnitReportHandler
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.JUnitTestReport
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.helpers.SessionCleanupHelper
 
 import static org.gradle.internal.impldep.org.hamcrest.MatcherAssert.assertThat
 import static org.gradle.internal.impldep.org.hamcrest.core.Is.is
-import static org.gradle.testkit.runner.TaskOutcome.*
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
+import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
 
 class ReportToSauceLabsTaskIntegrationLoadSpec extends Specification {
 

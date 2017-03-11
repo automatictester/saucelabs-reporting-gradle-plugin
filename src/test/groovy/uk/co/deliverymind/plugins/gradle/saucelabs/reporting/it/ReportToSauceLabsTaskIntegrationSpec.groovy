@@ -7,15 +7,11 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.JUnitReportHandler
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.JUnitTestReport
-import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.SessionHandler
-import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.helpers.SessionCleanupHelper
 
 import static org.gradle.internal.impldep.org.hamcrest.MatcherAssert.assertThat
 import static org.gradle.internal.impldep.org.hamcrest.core.Is.is
-import static org.gradle.testkit.runner.TaskOutcome.FAILED
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
-import static org.gradle.testkit.runner.TaskOutcome.UP_TO_DATE
+import static org.gradle.testkit.runner.TaskOutcome.*
 
 class ReportToSauceLabsTaskIntegrationSpec extends Specification {
 

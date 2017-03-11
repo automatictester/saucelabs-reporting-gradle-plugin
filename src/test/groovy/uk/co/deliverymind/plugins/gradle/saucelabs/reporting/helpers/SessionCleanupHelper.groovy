@@ -2,7 +2,6 @@ package uk.co.deliverymind.plugins.gradle.saucelabs.reporting.helpers
 
 import com.saucelabs.saucerest.SauceREST
 import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.JUnitTestReport
-import uk.co.deliverymind.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension
 
 class SessionCleanupHelper {
 

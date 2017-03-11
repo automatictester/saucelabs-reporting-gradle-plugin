@@ -60,7 +60,7 @@ class SessionHandlerSpec extends Specification {
         null        | false        | true           | "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: null\nExpected status: false\n"
     }
 
-    def 'Should results inconsistency correctly for actionOnFailure set to #actionOnFailure'() {
+    def 'Should handle results inconsistency correctly for actionOnFailure set to ActionOnFailure.WARNING'() {
         given: 'Mocks are in place'
         SaucelabsReportingExtension cfg = Stub()
         JUnitTestReport testReport = Stub()
@@ -84,7 +84,7 @@ class SessionHandlerSpec extends Specification {
         out.contains(MESSAGE)
     }
 
-    def 'Should handle results inconsistency correctly for actionOnFailure set to error'() {
+    def 'Should handle results inconsistency correctly for actionOnFailure set to ActionOnFailure.ERROR'() {
         given: 'Mocks are in place'
         SaucelabsReportingExtension cfg = Stub()
         JUnitTestReport testReport = Stub()
