@@ -12,7 +12,7 @@ class JUnitReportHandler {
     static List<String> getAllFiles(String directory) {
         def files = []
         File dir = new File(directory)
-        dir.eachFileRecurse(FileType.FILES) { file ->
+        dir.absoluteFile.eachFileRecurse(FileType.FILES) { file ->
             files << file.path
         }
         files

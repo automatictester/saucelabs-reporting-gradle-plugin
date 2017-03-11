@@ -5,17 +5,19 @@ import spock.lang.Specification
 class JUnitReportHandlerSpec extends Specification {
 
     def "Should return list of all JUnit reports recursively"() {
-
         given:
+        String DIR = 'plugin/src/test/resources/report-handler'
+
+        and:
         def expectedJUnitReports = [
-                'src/test/resources/report-handler/subdir/TEST-DTest.xml',
-                'src/test/resources/report-handler/subdir/TEST-uk.co.deliverymind.CTest.xml',
-                'src/test/resources/report-handler/TEST-ATest.xml',
-                'src/test/resources/report-handler/TEST-BTest.xml'
+                new File("${DIR}/subdir/TEST-DTest.xml").absolutePath,
+                new File("${DIR}/subdir/TEST-uk.co.deliverymind.CTest.xml").absolutePath,
+                new File("${DIR}/TEST-ATest.xml").absolutePath,
+                new File("${DIR}/TEST-BTest.xml").absolutePath
         ]
 
         when:
-        def foundJUnitReports = JUnitReportHandler.getJUnitReports('src/test/resources/report-handler', /TEST-(.)*\.xml/)
+        def foundJUnitReports = JUnitReportHandler.getJUnitReports(DIR, /TEST-(.)*\.xml/)
 
         then:
         foundJUnitReports.containsAll(expectedJUnitReports)
