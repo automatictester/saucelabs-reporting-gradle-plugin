@@ -25,11 +25,11 @@ def install() {
 }
 
 def test() {
-    sh "./gradlew :plugin:clean :plugin:test"
+    sh "./gradlew :plugin:clean :plugin:test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
 }
 
 def runITs() {
-    sh "./gradlew :plugin-it:clean :plugin-it:test :plugin-it:reportToSauceLabs"
+    sh "./gradlew :plugin-it:clean :plugin-it:test :plugin-it:reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
 }
 
 def tagRelease() {
