@@ -47,7 +47,7 @@ def push() {
 }
 
 def cleanupWorkspace() {
-//    step([$class: 'WsCleanup'])
+    step([$class: 'WsCleanup'])
 }
 
 def isNotTestOnly() {
