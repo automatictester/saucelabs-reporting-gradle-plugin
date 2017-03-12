@@ -40,8 +40,7 @@ def release() {
     sh "(cd plugin; gradle clean uploadArchives -i)"
 }
 
-def clone() {
-    sh 'echo "Cloning Git repository...'
+def cloneGitRepo() {
     sshagent(["${GIT_CREDENTIALS_ID}"]) {
         sh "git clone ${REPO_URL} ."
     }
@@ -83,7 +82,7 @@ pipeline {
         }
         stage('Clone') {
             steps {
-                clone()
+                cloneGitRepo()
             }
         }
         stage('Purge') {
