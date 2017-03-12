@@ -21,6 +21,7 @@ repositories {
 
 saucelabsReportingSettings {
     testResultsDir = 'plugin/src/test/resources/it/build/test-results'
+    actionOnFailure = 'ERROR'
     user = System.properties.SL_USER
     key = System.properties.SL_KEY
 }
