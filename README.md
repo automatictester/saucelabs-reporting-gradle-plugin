@@ -3,16 +3,16 @@ Sauce Labs Reporting Gradle Plugin
 
 [![Central status](https://maven-badges.herokuapp.com/maven-central/uk.co.deliverymind/saucelabs-reporting-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/uk.co.deliverymind/saucelabs-reporting-gradle-plugin)
 
-Gradle plugin which reports test results back to Sauce Labs.
+Gradle plugin which reports test results back to [Sauce Labs](https://saucelabs.com).
 
 How does this plugin work:
-- traverses recursively given location in you file system to retrieve all XML reports in JUnit format produced by your unit test framework
+- traverses recursively given location in you file system to retrieve all JUnit reports in XML format produced by your unit test framework
 - parses them looking for **SauceOnDemandSessionID**
 - reports test results back to Sauce Labs
-- for every result reported back, it checks if Sauce Labs session was updated and holds expected status
+- for every result reported back, it checks if Sauce Labs session was correctly updated
 - if not, it gives a warning or an error
-- it is unit test framework-agnostic, as long as produced reports are in JUnit XML format\
-- it expects your tests classes to have 1-to-1 relationship with Sauce Labs sessions
+- it is unit test framework-agnostic, as long as produced reports are in JUnit XML format
+- it expects your test classes to be in 1-to-1 relationship with Sauce Labs sessions
 
 ## Quick start guide
 
