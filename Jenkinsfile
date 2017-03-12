@@ -21,15 +21,15 @@ def setSnapshotVersion() {
 }
 
 def install() {
-    sh "./gradlew :plugin:clean :plugin:pTML -x :plugin:test"
+    sh "./gradlew :saucelabs-reporting-gradle-plugin:clean :saucelabs-reporting-gradle-plugin:pTML -x :saucelabs-reporting-gradle-plugin:test"
 }
 
 def test() {
-    sh "./gradlew :plugin:clean :plugin:test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
+    sh "./gradlew :saucelabs-reporting-gradle-plugin:clean :saucelabs-reporting-gradle-plugin:test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
 }
 
 def runITs() {
-//    sh "./gradlew :plugin-it:clean :plugin-it:test :plugin-it:reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
+//    sh "./gradlew :saucelabs-reporting-gradle-plugin-it:clean :saucelabs-reporting-gradle-plugin-it:test :saucelabs-reporting-gradle-plugin-it:reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
 }
 
 def tagRelease() {
@@ -37,7 +37,7 @@ def tagRelease() {
 }
 
 def release() {
-    sh "./gradlew :plugin:clean :plugin:uploadArchives -i"
+    sh "./gradlew :saucelabs-reporting-gradle-plugin:clean :saucelabs-reporting-gradle-plugin:uploadArchives -i"
 }
 
 def push() {
@@ -47,7 +47,7 @@ def push() {
 }
 
 def cleanupWorkspace() {
-    step([$class: 'WsCleanup'])
+//    step([$class: 'WsCleanup'])
 }
 
 def isNotTestOnly() {
