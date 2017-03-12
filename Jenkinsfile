@@ -28,7 +28,7 @@ def test() {
     sh "./gradlew :saucelabs-reporting-gradle-plugin:clean :saucelabs-reporting-gradle-plugin:test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
 }
 
-def runITs() {
+def runE2ETest() {
 //    sh "./gradlew :saucelabs-reporting-gradle-plugin-it:clean :saucelabs-reporting-gradle-plugin-it:test :saucelabs-reporting-gradle-plugin-it:reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
 }
 
@@ -73,11 +73,19 @@ pipeline {
                 purge()
             }
         }
-        stage('Test, install and run E2E ITs') {
+        stage('Test') {
             steps {
                 test()
+            }
+        }
+        stage('Install') {
+            steps {
                 install()
-                runITs()
+            }
+        }
+        stage('E2E test') {
+            steps {
+                runE2ETest()
             }
         }
         stage('Set release version number') {
@@ -120,7 +128,7 @@ pipeline {
                 purge()
             }
         }
-        stage('Test, install and run E2E ITs - snapshot') {
+        stage('Test - snapshot') {
             when {
                 expression {
                     isNotTestOnly()
@@ -128,8 +136,26 @@ pipeline {
             }
             steps {
                 test()
+            }
+        }
+        stage('Install - snapshot') {
+            when {
+                expression {
+                    isNotTestOnly()
+                }
+            }
+            steps {
                 install()
-                runITs()
+            }
+        }
+        stage('E2E test - snapshot') {
+            when {
+                expression {
+                    isNotTestOnly()
+                }
+            }
+            steps {
+                runE2ETest()
             }
         }
         stage('Set snapshot version number') {
