@@ -21,7 +21,7 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         given: 'There is a project configured to use saucelabs-reporting plugin'
         GradleRunner runner = GradleRunner.create()
                 .withGradleVersion(version)
-                .withProjectDir(new File('plugin/src/test/resources/it'))
+                .withProjectDir(new File('src/test/resources/it'))
                 .withPluginClasspath()
 
         when: 'clean task is run'
@@ -53,7 +53,7 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         assertThat(reportResult.task(':reportToSauceLabs').outcome, is(SUCCESS))
 
         cleanup: 'Sauce Labs sessions created by this integration test are deleted'
-        List<String> junitReportFiles = JUnitReportHandler.getJUnitReports('plugin/src/test/resources/it/build/test-results', /TEST-(.)*\.xml/)
+        List<String> junitReportFiles = JUnitReportHandler.getJUnitReports('src/test/resources/it/build/test-results', /TEST-(.)*\.xml/)
 
         junitReportFiles.each {
             JUnitTestReport testReport = new JUnitTestReport(it)

@@ -20,16 +20,16 @@ def setSnapshotVersion() {
     sh "git add -A; git commit -m 'Post-release version bump'"
 }
 
-def install() {
-    sh "./gradlew :saucelabs-reporting-gradle-plugin:clean :saucelabs-reporting-gradle-plugin:pTML -x :saucelabs-reporting-gradle-plugin:test"
+def test() {
+    sh "(cd plugin; gradle clean test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY})"
 }
 
-def test() {
-    sh "./gradlew :saucelabs-reporting-gradle-plugin:clean :saucelabs-reporting-gradle-plugin:test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
+def install() {
+    sh "(cd plugin; gradle clean pTML -x test)"
 }
 
 def runE2ETest() {
-//    sh "./gradlew :saucelabs-reporting-gradle-plugin-it:clean :saucelabs-reporting-gradle-plugin-it:test :saucelabs-reporting-gradle-plugin-it:reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
+    sh "(cd plugin-it; gradle clean test reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY})"
 }
 
 def tagRelease() {
@@ -37,7 +37,7 @@ def tagRelease() {
 }
 
 def release() {
-    sh "./gradlew :saucelabs-reporting-gradle-plugin:clean :saucelabs-reporting-gradle-plugin:uploadArchives -i"
+    sh "(cd plugin; gradle clean uploadArchives -i)"
 }
 
 def push() {

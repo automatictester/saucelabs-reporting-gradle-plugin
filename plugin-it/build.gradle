@@ -1,0 +1,49 @@
+group 'uk.co.deliverymind'
+version '1.0.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+
+test {
+    outputs.upToDateWhen { false }
+    systemProperties System.properties
+}
+
+// START of Sauce Labs Reporting Gradle Plugin-specific configuration
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "uk.co.deliverymind:saucelabs-reporting-gradle-plugin:${sauceReportingGradlePluginVersion}"
+    }
+}
+
+apply plugin: 'uk.co.deliverymind.saucelabs-reporting'
+
+saucelabsReportingSettings {
+
+    // Filename pattern of JUnit reports. In most cases, stick to the default.
+    filenamePattern = /TEST-(.)*\.xml/
+
+    // Where to find JUnit reports. This will depend on your project setup and Gradle version being used.
+    testResultsDir = 'build/test-results'
+
+    // Sauce Labs credentials.
+    user = System.properties.SL_USER
+    key = System.properties.SL_KEY
+
+    // What to do if session status after updated is different from expected. Either ERROR or WARNING.
+    actionOnFailure = 'WARNING'
+}
+// END of Sauce Labs Reporting Gradle Plugin-specific configuration
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'org.seleniumhq.selenium:selenium-java:2.53.0'
+}
+
+repositories {
+    mavenCentral()
+}

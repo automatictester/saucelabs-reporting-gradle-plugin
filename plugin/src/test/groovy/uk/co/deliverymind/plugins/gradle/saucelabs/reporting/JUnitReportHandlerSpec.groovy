@@ -6,7 +6,7 @@ class JUnitReportHandlerSpec extends Specification {
 
     def "Should return list of all JUnit reports recursively"() {
         given:
-        String DIR = 'plugin/src/test/resources/report-handler'
+        String DIR = 'src/test/resources/report-handler'
 
         and:
         def expectedJUnitReports = [
