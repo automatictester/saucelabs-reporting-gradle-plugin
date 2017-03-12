@@ -168,7 +168,7 @@ pipeline {
                 setSnapshotVersion()
             }
         }
-        stage('Push release to origin/master') {
+        stage('Push release to origin') {
             when {
                 expression {
                     isNotDryRunOnly()
