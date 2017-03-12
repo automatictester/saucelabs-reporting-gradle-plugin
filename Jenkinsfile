@@ -40,6 +40,12 @@ def release() {
     sh "(cd plugin; gradle clean uploadArchives -i)"
 }
 
+def clone() {
+    sshagent(["${GIT_CREDENTIALS_ID}"]) {
+        sh "git clone ${REPO_URL} ."
+    }
+}
+
 def push() {
     sshagent(["${GIT_CREDENTIALS_ID}"]) {
         sh "git push --set-upstream origin master; git push --tags"
@@ -66,8 +72,19 @@ pipeline {
     }
     options {
         timestamps()
+        skipDefaultCheckout()
     }
     stages {
+        stage('Cleanup') {
+            steps {
+                cleanupWorkspace()
+            }
+        }
+        stage('Clone') {
+            steps {
+                clone()
+            }
+        }
         stage('Purge') {
             steps {
                 purge()
@@ -176,11 +193,6 @@ pipeline {
             }
             steps {
                 push()
-            }
-        }
-        stage('Cleanup') {
-            steps {
-                cleanupWorkspace()
             }
         }
     }
