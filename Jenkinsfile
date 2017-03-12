@@ -41,6 +41,7 @@ def release() {
 }
 
 def clone() {
+    sh 'echo "Cloning Git repository...'
     sshagent(["${GIT_CREDENTIALS_ID}"]) {
         sh "git clone ${REPO_URL} ."
     }
