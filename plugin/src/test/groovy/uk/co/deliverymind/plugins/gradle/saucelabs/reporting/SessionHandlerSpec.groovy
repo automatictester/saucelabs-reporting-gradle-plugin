@@ -45,9 +45,9 @@ class SessionHandlerSpec extends Specification {
 
         then: 'Inconsistency is correctly handled'
         if (isInconsistent) {
-            out.contains(message)
+            assert out.contains(message)
         } else {
-            out == ''
+            assert out == ''
         }
 
         where:
