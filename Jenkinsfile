@@ -196,4 +196,9 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            junit 'plugin/build/test-results/*.xml'
+        }
+    }
 }
