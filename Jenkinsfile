@@ -94,6 +94,11 @@ pipeline {
             steps {
                 test()
             }
+            post {
+                always {
+                    junit 'plugin/build/test-results/*.xml'
+                }
+            }
         }
         stage('Install') {
             steps {
@@ -194,11 +199,6 @@ pipeline {
             steps {
                 push()
             }
-        }
-    }
-    post {
-        always {
-            junit 'plugin/build/test-results/*.xml'
         }
     }
 }
