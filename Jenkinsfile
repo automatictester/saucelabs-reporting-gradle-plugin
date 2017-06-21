@@ -90,6 +90,16 @@ pipeline {
                 purge()
             }
         }
+        stage('Set release version number') {
+            when {
+                expression {
+                    isNotTestOnly()
+                }
+            }
+            steps {
+                setReleaseVersion()
+            }
+        }
         stage('Test') {
             steps {
                 test()
@@ -110,16 +120,6 @@ pipeline {
                 runE2ETest()
             }
         }
-        stage('Set release version number') {
-            when {
-                expression {
-                    isNotTestOnly()
-                }
-            }
-            steps {
-                setReleaseVersion()
-            }
-        }
         stage('Tag release') {
             when {
                 expression {
@@ -138,46 +138,6 @@ pipeline {
             }
             steps {
                 release()
-            }
-        }
-        stage('Purge - snapshot') {
-            when {
-                expression {
-                    isNotTestOnly()
-                }
-            }
-            steps {
-                purge()
-            }
-        }
-        stage('Test - snapshot') {
-            when {
-                expression {
-                    isNotTestOnly()
-                }
-            }
-            steps {
-                test()
-            }
-        }
-        stage('Install - snapshot') {
-            when {
-                expression {
-                    isNotTestOnly()
-                }
-            }
-            steps {
-                install()
-            }
-        }
-        stage('E2E test - snapshot') {
-            when {
-                expression {
-                    isNotTestOnly()
-                }
-            }
-            steps {
-                runE2ETest()
             }
         }
         stage('Set snapshot version number') {
