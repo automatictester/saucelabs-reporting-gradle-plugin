@@ -26,8 +26,8 @@ pipelineJob('saucelabs-reporting-gradle-plugin/build') {
         }
     }
     parameters {
-        stringParam('RELEASE_VERSION', '1.0.0', '')
-        stringParam('SNAPSHOT_VERSION', '1.0.1-SNAPSHOT', '')
+        stringParam('RELEASE_VERSION', '9.0.0', '')
+        stringParam('SNAPSHOT_VERSION', '9.0.1-SNAPSHOT', '')
         stringParam('REPO_URL', 'git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git', 'Or local path, e.g.: "file:///Users/username/git/saucelabs-reporting-gradle-plugin"')
         stringParam('GIT_CREDENTIALS_ID', gitCreds, '')
         stringParam('GIT_BRANCH', 'master', '')
