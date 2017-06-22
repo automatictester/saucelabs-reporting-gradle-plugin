@@ -7,12 +7,38 @@ apply plugin: 'maven-publish'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'signing'
 
-test {
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integrationTest/java')
+        }
+        resources.srcDir file('src/integrationTest/resources')
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
     outputs.upToDateWhen { false }
+
     doFirst {
         println "\nThis task takes a while to execute, due to Gradle compatibility tests and integration tests with Sauce Labs. Subsequent executions will be significantly faster but still time consuming.\n"
     }
     systemProperties System.properties
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
+tasks.withType(Test) {
+    reports.html.destination = file("${reporting.baseDir}/${name}")
 }
 
 dependencies {
