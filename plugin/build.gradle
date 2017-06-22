@@ -6,6 +6,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'signing'
+apply plugin: 'codenarc'
 
 sourceSets {
     integrationTest {
@@ -40,6 +41,14 @@ integrationTest.mustRunAfter test
 tasks.withType(Test) {
     reports.html.destination = file("${reporting.baseDir}/${name}")
 }
+
+codenarc {
+    toolVersion = '0.27.0'
+}
+
+codenarcMain.configFile = rootProject.file('config/codenarc/rules.groovy')
+codenarcTest.configFile = codenarcMain.configFile
+codenarcIntegrationTest.configFile = codenarcMain.configFile
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.4'

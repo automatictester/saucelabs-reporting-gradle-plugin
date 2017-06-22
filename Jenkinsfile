@@ -54,7 +54,7 @@ pipeline {
         }
         stage('Install') {
             steps {
-                sh "(cd plugin; gradle clean pTML -x test -x integrationTest)"
+                sh "(cd plugin; gradle clean pTML)"
             }
         }
         stage('E2E test') {

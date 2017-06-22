@@ -14,7 +14,7 @@ class SessionHandler {
     }
 
     void updateSessionResult(JUnitTestReport testReport) {
-        HashMap<String, Boolean> updates = new HashMap<String, Boolean>()
+        Map<String, Boolean> updates = [:]
         updates.put('passed', testReport.passed)
         testReport.log()
         SauceREST restClient = new SauceREST(cfg.user, cfg.key)
@@ -31,11 +31,16 @@ class SessionHandler {
 
     void handleSessionStatusUpdate(Boolean currentSessionResult, JUnitTestReport testReport) {
         if (currentSessionResult != testReport.passed) {
-            String message = "\nSession '${testReport.sessionId}' for ${testReport.filename} was not updated\nStatus in Sauce Labs: ${currentSessionResult}\nExpected status: ${testReport.passed}\n"
-            switch(cfg.actionOnFailure) {
+            String message = """
+
+Session '${testReport.sessionId}' for ${testReport.filename} was not updated
+Status in Sauce Labs: ${currentSessionResult}
+Expected status: ${testReport.passed}
+
+"""
+            switch (cfg.actionOnFailure) {
                 case ActionOnFailure.ERROR:
                     throw new GradleException(message)
-                    break
                 case ActionOnFailure.WARNING:
                     println message
                     break

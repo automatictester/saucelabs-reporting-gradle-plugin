@@ -25,7 +25,7 @@ class JUnitTestReport {
     }
 
     void log() {
-        String time = new Date().format("HH:mm:ss:SSS")
+        String time = new Date().format('HH:mm:ss:SSS')
 
         println 'Processing session:'
         println "Current time: ${time}"

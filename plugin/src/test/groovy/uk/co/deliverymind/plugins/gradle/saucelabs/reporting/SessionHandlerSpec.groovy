@@ -14,18 +14,18 @@ class SessionHandlerSpec extends Specification {
     SystemOutputInterceptor interceptor
     String out
 
-    def setup() {
+    void setup() {
         out = ''
         interceptor = new SystemOutputInterceptor({ out += it; false })
         interceptor.start()
     }
 
-    def cleanup() {
+    void cleanup() {
         interceptor.stop()
     }
 
-    @Unroll("Should detect results inconsistency correctly: #sauceResult - #reportResult")
-    def "Should detect results inconsistency correctly: #sauceResult - #reportResult"() {
+    @Unroll
+    void "Should detect results inconsistency correctly: #sauceResult - #reportResult"() {
         given: 'Mocks are in place'
         SaucelabsReportingExtension cfg = Stub()
         JUnitTestReport testReport = Stub()
@@ -60,7 +60,7 @@ class SessionHandlerSpec extends Specification {
         null        | false        | true           | "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: null\nExpected status: false\n"
     }
 
-    def 'Should handle results inconsistency correctly for actionOnFailure set to ActionOnFailure.WARNING'() {
+    void 'Should handle results inconsistency correctly for actionOnFailure set to ActionOnFailure.WARNING'() {
         given: 'Mocks are in place'
         SaucelabsReportingExtension cfg = Stub()
         JUnitTestReport testReport = Stub()
@@ -72,7 +72,7 @@ class SessionHandlerSpec extends Specification {
         testReport.filename >> FILENAME
 
         and: 'Expected message is set'
-        String MESSAGE = "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: true\nExpected status: false\n"
+        String message = "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: true\nExpected status: false\n"
 
         and: 'Plugin extension is configured'
         cfg.actionOnFailure >> ActionOnFailure.WARNING
@@ -81,10 +81,10 @@ class SessionHandlerSpec extends Specification {
         sessionHandler.handleSessionStatusUpdate(true, testReport)
 
         then: 'Message is sent to STDOUT as expected'
-        out.contains(MESSAGE)
+        out.contains(message)
     }
 
-    def 'Should handle results inconsistency correctly for actionOnFailure set to ActionOnFailure.ERROR'() {
+    void 'Should handle results inconsistency correctly for actionOnFailure set to ActionOnFailure.ERROR'() {
         given: 'Mocks are in place'
         SaucelabsReportingExtension cfg = Stub()
         JUnitTestReport testReport = Stub()
@@ -100,6 +100,6 @@ class SessionHandlerSpec extends Specification {
         sessionHandler.handleSessionStatusUpdate(true, testReport)
 
         then: 'Expected action takes place'
-        GradleException e = thrown()
+        thrown(GradleException)
     }
 }

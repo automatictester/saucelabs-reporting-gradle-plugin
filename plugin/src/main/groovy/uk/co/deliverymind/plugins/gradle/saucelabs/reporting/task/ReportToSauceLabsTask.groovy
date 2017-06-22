@@ -11,7 +11,7 @@ class ReportToSauceLabsTask extends DefaultTask {
 
     @TaskAction
     void reportToSauceLabs() {
-        SaucelabsReportingExtension cfg = project.extensions.findByType(SaucelabsReportingExtension.class)
+        SaucelabsReportingExtension cfg = project.extensions.findByType(SaucelabsReportingExtension)
         List<String> junitReports = JUnitReportHandler.getJUnitReports(cfg.testResultsDir, cfg.filenamePattern)
 
         junitReports.each {
