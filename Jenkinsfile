@@ -21,11 +21,11 @@ def setSnapshotVersion() {
 }
 
 def test() {
-    sh "(cd plugin; gradle clean test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY})"
+    sh "(cd plugin; gradle clean check -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY})"
 }
 
 def install() {
-    sh "(cd plugin; gradle clean pTML -x test)"
+    sh "(cd plugin; gradle clean pTML -x test -x integrationTest)"
 }
 
 def runE2ETest() {
