@@ -35,31 +35,19 @@ pipeline {
                 }
             }
             steps {
-                sh "(cd plugin; sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${RELEASE_VERSION}/\" gradle.properties)"
-                sh "(cd plugin; cat gradle.properties)"
-                sh "(cd plugin-it; sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${RELEASE_VERSION}/\" gradle.properties)"
-                sh "(cd plugin-it; cat gradle.properties)"
+                sh "sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${RELEASE_VERSION}/\" gradle.properties"
+                sh "cat gradle.properties"
                 sh "git add -A; git commit -m 'Release version bump'"
             }
         }
         stage('Test') {
             steps {
-                sh "(cd plugin; gradle clean check -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY})"
+                sh "gradle clean check -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
             }
             post {
                 always {
-                    junit 'plugin/build/test-results/*.xml'
+                    junit 'build/test-results/*.xml'
                 }
-            }
-        }
-        stage('Install') {
-            steps {
-                sh "(cd plugin; gradle clean pTML)"
-            }
-        }
-        stage('E2E test') {
-            steps {
-                sh "(cd plugin-it; gradle clean test reportToSauceLabs -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY})"
             }
         }
         stage('Tag release') {
@@ -79,7 +67,7 @@ pipeline {
                 }
             }
             steps {
-                sh "(cd plugin; gradle clean uploadArchives -i)"
+                sh "gradle clean uploadArchives -i"
             }
         }
         stage('Set snapshot version number') {
@@ -89,10 +77,8 @@ pipeline {
                 }
             }
             steps {
-                sh "(cd plugin; sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${SNAPSHOT_VERSION}/\" gradle.properties)"
-                sh "(cd plugin; cat gradle.properties)"
-                sh "(cd plugin-it; sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${SNAPSHOT_VERSION}/\" gradle.properties)"
-                sh "(cd plugin-it; cat gradle.properties)"
+                sh "sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${SNAPSHOT_VERSION}/\" gradle.properties"
+                sh "cat gradle.properties"
                 sh "git add -A; git commit -m 'Post-release version bump'"
             }
         }

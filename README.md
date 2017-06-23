@@ -55,13 +55,3 @@ saucelabsReportingSettings {
 After you run your tests, report the results to Sauce Labs:
 
 ```gradle reportToSauceLabs```
-
-## Repo structure
-
-### plugin
-
-This project contains plugin itself.
-
-### plugin-it
-
-This project contains all-in-one end-to-end integration test and usage example
