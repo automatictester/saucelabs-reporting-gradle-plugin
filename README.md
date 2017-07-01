@@ -3,7 +3,7 @@ Sauce Labs Reporting Gradle Plugin
 
 [![Central status](https://maven-badges.herokuapp.com/maven-central/uk.co.deliverymind/saucelabs-reporting-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/uk.co.deliverymind/saucelabs-reporting-gradle-plugin)
 
-Gradle plugin which reports test results back to [Sauce Labs](https://saucelabs.com).
+Gradle plugin which reports test results back to [Sauce Labs][1].
 
 How does this plugin work:
 - traverses recursively given location in you file system to retrieve all JUnit reports in XML format produced by your unit test framework
@@ -16,7 +16,7 @@ How does this plugin work:
 
 ## Quick start guide
 
-Add plugin to your **build.gradle**:
+There is more than one way to apply this plugin to your project (**build.gradle**). You can either follow the guideline on [Gradle Plugin Portal][1] or the one below:
 
 ```
 [...]
@@ -26,13 +26,17 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // check maven central badge above for most recent released version number
-        classpath "uk.co.deliverymind:saucelabs-reporting-gradle-plugin:1.0.0"
+        // always check maven central badge above for most recent released version number
+        classpath "uk.co.deliverymind:saucelabs-reporting-gradle-plugin:1.1.0"
     }
 }
 
 apply plugin: 'uk.co.deliverymind.saucelabs-reporting'
+```
 
+Once you applied the plugin, you need to configure it:
+
+```
 saucelabsReportingSettings {
 
     // Filename pattern of JUnit reports. In most cases, stick to the default.
@@ -52,6 +56,9 @@ saucelabsReportingSettings {
 [...]
 ```
 
-After you run your tests, report the results to Sauce Labs:
+After you run your Sauce Labs tests, report their results to Sauce Labs:
 
 ```gradle reportToSauceLabs```
+
+[1]: https://saucelabs.com
+[2]: https://plugins.gradle.org/plugin/uk.co.deliverymind.saucelabs-reporting
