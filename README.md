@@ -16,7 +16,7 @@ How does this plugin work:
 
 ## Quick start guide
 
-There is more than one way to apply this plugin to your project (**build.gradle**). You can either follow the guideline on [Gradle Plugin Portal][1] or the one below:
+There is more than one way to apply this plugin to your project (**build.gradle**). You can either follow the guideline on [Gradle Plugin Portal][2] or the one below:
 
 ```
 [...]
