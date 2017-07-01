@@ -160,7 +160,7 @@ pluginBundle {
 
     plugins {
         SaucelabsReportingPlugin {
-            id = 'saucelabs-reporting'
+            id = 'uk.co.deliverymind.saucelabs-reporting'
             displayName = 'Sauce Labs Reporting Gradle Plugin'
         }
     }
