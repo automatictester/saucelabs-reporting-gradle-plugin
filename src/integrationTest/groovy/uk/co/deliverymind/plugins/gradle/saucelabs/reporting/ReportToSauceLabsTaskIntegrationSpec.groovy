@@ -63,7 +63,7 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         }
 
         where: 'Gradle versions'
-        version << ['2.8', '2.14', '3.0', '3.4.1']
+        version << ['2.14.1', '3.5', '4.0']
     }
 
     boolean isTaskSuccessOrUpToDate(BuildTask task) {
