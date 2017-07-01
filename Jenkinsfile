@@ -3,7 +3,6 @@
 pipeline {
     agent any
     tools {
-        gradle 'GRADLE_2.14'
         jdk 'jdk8'
     }
     options {
@@ -42,7 +41,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh "gradle clean check -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
+                sh "./gradlew clean check -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
             }
             post {
                 always {
@@ -68,9 +67,9 @@ pipeline {
             }
             steps {
                 // Maven Central
-                sh "gradle clean uploadArchives -i"
+                sh "./gradlew clean uploadArchives -i"
                 // Gradle Plugin Portal
-                sh "gradle clean publishPlugins -i"
+                sh "./gradlew clean publishPlugins -i"
             }
         }
         stage('Set snapshot version number') {
