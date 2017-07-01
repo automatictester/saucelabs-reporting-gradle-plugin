@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+    }
+}
+
 group = 'uk.co.deliverymind'
 version = sauceReportingGradlePluginVersion
 
@@ -7,6 +18,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'signing'
 apply plugin: 'codenarc'
+apply plugin: 'com.gradle.plugin-publish'
 
 sourceSets {
     integrationTest {
@@ -61,6 +73,7 @@ dependencies {
 repositories {
     mavenCentral()
     mavenLocal()
+    jcenter()
 }
 
 publishing {
@@ -137,4 +150,18 @@ artifacts {
 
 signing {
     sign configurations.archives
+}
+
+pluginBundle {
+    website = 'https://github.com/deliverymind/saucelabs-reporting-gradle-plugin'
+    vcsUrl = 'https://github.com/deliverymind/saucelabs-reporting-gradle-plugin'
+    description = 'Report test results to Sauce Labs'
+    tags = ['saucelabs']
+
+    plugins {
+        SaucelabsReportingPlugin {
+            id = 'saucelabs-reporting'
+            displayName = 'Sauce Labs Reporting Gradle Plugin'
+        }
+    }
 }

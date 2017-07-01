@@ -67,7 +67,10 @@ pipeline {
                 }
             }
             steps {
+                // Maven Central
                 sh "gradle clean uploadArchives -i"
+                // Gradle Plugin Portal
+                sh "gradle clean publishPlugins -i"
             }
         }
         stage('Set snapshot version number') {
