@@ -2,12 +2,21 @@
 
 pipeline {
     agent any
+    parameters {
+        string(name: 'RELEASE_VERSION', defaultValue: '9.0.0', description: '')
+        string(name: 'SNAPSHOT_VERSION', defaultValue: '9.0.1-SNAPSHOT', description: '')
+        string(name: 'TEST_ONLY', defaultValue: 'true', description: '')
+        string(name: 'DRY_RUN', defaultValue: 'true', description: '')
+        string(name: 'SL_USER', defaultValue: '', description: '')
+        string(name: 'SL_KEY', defaultValue: '', description: '')
+    }
     tools {
         jdk 'jdk8'
     }
     options {
         timestamps()
         skipDefaultCheckout()
+        disableConcurrentBuilds()
     }
     stages {
         stage('Cleanup') {
@@ -17,8 +26,8 @@ pipeline {
         }
         stage('Clone') {
             steps {
-                sshagent(["${GIT_CREDENTIALS_ID}"]) {
-                    sh "git clone ${REPO_URL} ."
+                sshagent(['github-creds']) {
+                    sh "git clone git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git ."
                 }
             }
         }
@@ -30,18 +39,33 @@ pipeline {
         stage('Set release version number') {
             when {
                 expression {
-                    "${TEST_ONLY}" == "false"
+                    "${params.TEST_ONLY}" == "false"
                 }
             }
             steps {
-                sh "sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${RELEASE_VERSION}/\" gradle.properties"
+                sh "sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${params.RELEASE_VERSION}/\" gradle.properties"
                 sh "cat gradle.properties"
                 sh "git add -A; git commit -m 'Release version bump'"
             }
         }
         stage('Test') {
             steps {
-                sh "./gradlew clean check -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
+                sh "./gradlew clean test"
+            }
+            post {
+                always {
+                    junit 'build/test-results/*.xml'
+                }
+            }
+        }
+        stage('Integration test') {
+            when {
+                expression {
+                    "${params.SL_USER}" != ''
+                }
+            }
+            steps {
+                sh "./gradlew clean check -x test -DSL_USER=${params.SL_USER} -DSL_KEY=${params.SL_KEY}"
             }
             post {
                 always {
@@ -52,17 +76,17 @@ pipeline {
         stage('Tag release') {
             when {
                 expression {
-                    "${TEST_ONLY}" == "false"
+                    "${params.TEST_ONLY}" == "false"
                 }
             }
             steps {
-                sh "git tag ${RELEASE_VERSION}"
+                sh "git tag ${params.RELEASE_VERSION}"
             }
         }
         stage('Release artefacts') {
             when {
                 expression {
-                    "${TEST_ONLY}" == "false" && "${DRY_RUN}" == "false"
+                    "${params.TEST_ONLY}" == "false" && "${params.DRY_RUN}" == "false"
                 }
             }
             steps {
@@ -75,11 +99,11 @@ pipeline {
         stage('Set snapshot version number') {
             when {
                 expression {
-                    "${TEST_ONLY}" == "false"
+                    "${params.TEST_ONLY}" == "false"
                 }
             }
             steps {
-                sh "sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${SNAPSHOT_VERSION}/\" gradle.properties"
+                sh "sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${params.SNAPSHOT_VERSION}/\" gradle.properties"
                 sh "cat gradle.properties"
                 sh "git add -A; git commit -m 'Post-release version bump'"
             }
@@ -87,11 +111,11 @@ pipeline {
         stage('Push release to origin') {
             when {
                 expression {
-                    "${TEST_ONLY}" == "false" && "${DRY_RUN}" == "false"
+                    "${params.TEST_ONLY}" == "false" && "${params.DRY_RUN}" == "false"
                 }
             }
             steps {
-                sshagent(["${GIT_CREDENTIALS_ID}"]) {
+                sshagent(['github-creds']) {
                     sh "git push --set-upstream origin master; git push --tags"
                 }
             }
