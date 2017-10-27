@@ -21,13 +21,13 @@ pipeline {
     stages {
         stage('Cleanup') {
             steps {
-                step([$class: 'WsCleanup'])
+                cleanWs()
             }
         }
         stage('Clone') {
             steps {
                 sshagent(['github-creds']) {
-                    sh "git clone git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git ."
+                    git credentialsId: 'github-creds', url: 'git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git'
                 }
             }
         }
@@ -86,7 +86,7 @@ pipeline {
         stage('Release artefacts') {
             when {
                 expression {
-                    "${params.TEST_ONLY}" == "false" && "${params.DRY_RUN}" == "false"
+                    "${params.TEST_ONLY}" == "false" && "${params.DRY_RUN}" == "false" && "${env.BRANCH_NAME}" == "master"
                 }
             }
             steps {
@@ -111,7 +111,7 @@ pipeline {
         stage('Push release to origin') {
             when {
                 expression {
-                    "${params.TEST_ONLY}" == "false" && "${params.DRY_RUN}" == "false"
+                    "${params.TEST_ONLY}" == "false" && "${params.DRY_RUN}" == "false" && "${env.BRANCH_NAME}" == "master"
                 }
             }
             steps {
