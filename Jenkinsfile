@@ -33,11 +33,6 @@ pipeline {
                 }
             }
         }
-        stage('Purge') {
-            steps {
-                sh 'rm -rf ~/.m2/repository/uk/co/deliverymind/saucelabs-reporting-gradle-plugin/'
-            }
-        }
         stage('Set release version number') {
             when {
                 expression {
