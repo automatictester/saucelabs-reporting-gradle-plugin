@@ -9,8 +9,6 @@ pipeline {
         string(name: 'SNAPSHOT_VERSION', defaultValue: '9.0.1-SNAPSHOT', description: '')
         string(name: 'TEST_ONLY', defaultValue: 'true', description: '')
         string(name: 'DRY_RUN', defaultValue: 'true', description: '')
-        string(name: 'SL_USER', defaultValue: '', description: '')
-        string(name: 'SL_KEY', defaultValue: '', description: '')
     }
     tools {
         jdk 'jdk8'
@@ -56,13 +54,10 @@ pipeline {
             }
         }
         stage('Integration test') {
-            when {
-                expression {
-                    "${params.SL_USER}" != ''
-                }
-            }
             steps {
-                sh "./gradlew clean check -x test -DSL_USER=${params.SL_USER} -DSL_KEY=${params.SL_KEY}"
+                withCredentials([usernamePassword(credentialsId: 'sauce-labs-job-creds', usernameVariable: 'SL_USER', passwordVariable: 'SL_KEY')]) {
+                    sh "./gradlew clean check -x test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
+                }
             }
             post {
                 always {
