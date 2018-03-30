@@ -24,7 +24,7 @@ pipeline {
         stage('Clone') {
             steps {
                 sshagent(['github-creds']) {
-                    git credentialsId: 'github-creds', url: 'git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git'
+                    git credentialsId: 'github-creds', url: 'git@github.com:automatictester/saucelabs-reporting-gradle-plugin.git'
                 }
             }
         }

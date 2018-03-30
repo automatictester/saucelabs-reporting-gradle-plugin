@@ -1,7 +1,7 @@
 # saucelabs-reporting-gradle-plugin
 Sauce Labs Reporting Gradle Plugin
 
-[![Central status](https://maven-badges.herokuapp.com/maven-central/uk.co.deliverymind/saucelabs-reporting-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/uk.co.deliverymind/saucelabs-reporting-gradle-plugin)
+[![Central status](https://maven-badges.herokuapp.com/maven-central/uk.co.automatictester/saucelabs-reporting-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/uk.co.automatictester/saucelabs-reporting-gradle-plugin)
 
 Gradle plugin which reports test results back to [Sauce Labs][1].
 
@@ -27,11 +27,11 @@ buildscript {
     }
     dependencies {
         // always check maven central badge above for most recent released version number
-        classpath "uk.co.deliverymind:saucelabs-reporting-gradle-plugin:1.1.0"
+        classpath "uk.co.automatictester:saucelabs-reporting-gradle-plugin:1.1.0"
     }
 }
 
-apply plugin: 'uk.co.deliverymind.saucelabs-reporting'
+apply plugin: 'uk.co.automatictester.saucelabs-reporting'
 ```
 
 Once you applied the plugin, you need to configure it:
@@ -61,4 +61,4 @@ After you run your Sauce Labs tests, report their results to Sauce Labs:
 ```gradle reportToSauceLabs```
 
 [1]: https://saucelabs.com
-[2]: https://plugins.gradle.org/plugin/uk.co.deliverymind.saucelabs-reporting
+[2]: https://plugins.gradle.org/plugin/uk.co.automatictester.saucelabs-reporting

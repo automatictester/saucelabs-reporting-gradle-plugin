@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-group = 'uk.co.deliverymind'
+group = 'uk.co.automatictester'
 version = sauceReportingGradlePluginVersion
 
 apply plugin: 'groovy'
@@ -107,12 +107,12 @@ uploadArchives {
                 version sauceReportingGradlePluginVersion
                 packaging 'jar'
                 description 'Gradle plugin for reporting test results to Sauce Labs'
-                url 'http://deliverymind.github.io/saucelabs-reporting-gradle-plugin'
+                url 'http://automatictester.github.io/saucelabs-reporting-gradle-plugin'
 
                 scm {
-                    connection 'scm:git:git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git'
-                    developerConnection 'scm:git:git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git'
-                    url 'git@github.com:deliverymind/saucelabs-reporting-gradle-plugin.git'
+                    connection 'scm:git:git@github.com:automatictester/saucelabs-reporting-gradle-plugin.git'
+                    developerConnection 'scm:git:git@github.com:automatictester/saucelabs-reporting-gradle-plugin.git'
+                    url 'git@github.com:automatictester/saucelabs-reporting-gradle-plugin.git'
                 }
 
                 licenses {
@@ -124,9 +124,9 @@ uploadArchives {
 
                 developers {
                     developer {
-                        name 'Irek Pastusiak'
-                        email 'irek@deliverymind.co.uk'
-                        organizationUrl 'https://github.com/deliverymind'
+                        name 'Ireneusz Pastusiak'
+                        email 'ireneusz.pastusiak@gmail.com'
+                        organizationUrl 'https://github.com/automatictester'
                     }
                 }
             }
@@ -153,14 +153,14 @@ signing {
 }
 
 pluginBundle {
-    website = 'https://github.com/deliverymind/saucelabs-reporting-gradle-plugin'
-    vcsUrl = 'https://github.com/deliverymind/saucelabs-reporting-gradle-plugin'
+    website = 'https://github.com/automatictester/saucelabs-reporting-gradle-plugin'
+    vcsUrl = 'https://github.com/automatictester/saucelabs-reporting-gradle-plugin'
     description = 'Report test results to Sauce Labs'
     tags = ['saucelabs']
 
     plugins {
         SaucelabsReportingPlugin {
-            id = 'uk.co.deliverymind.saucelabs-reporting'
+            id = 'uk.co.automatictester.saucelabs-reporting'
             displayName = 'Sauce Labs Reporting Gradle Plugin'
         }
     }
