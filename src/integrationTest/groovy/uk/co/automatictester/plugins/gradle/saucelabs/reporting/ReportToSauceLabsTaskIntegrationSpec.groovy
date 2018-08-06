@@ -55,7 +55,7 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         assertThat(reportResult.task(reportToSauceLabs).outcome, is(SUCCESS))
 
         cleanup: 'Sauce Labs sessions created by this integration test are deleted'
-        List<String> junitReportFiles = JUnitReportHandler.getJUnitReports('src/integrationTest/resources/build/test-results', /TEST-(.)*\.xml/)
+        List<String> junitReportFiles = JUnitReportHandler.getJUnitReportFiles('src/integrationTest/resources/build/test-results', /TEST-(.)*\.xml/)
 
         junitReportFiles.each {
             JUnitTestReport testReport = new JUnitTestReport(it)

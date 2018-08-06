@@ -5,23 +5,35 @@ class JUnitTestReport {
     String sessionId
     boolean passed
 
-    JUnitTestReport(String filename) {
-        Node xml = new XmlParser().parse(filename)
-
-        String systemOutCData = xml.get('system-out').text()
-        Properties prop = new Properties()
-        prop.load(new StringReader(systemOutCData))
-
-        int failures = Integer.parseInt(xml.attribute('failures').toString())
-        int errors = Integer.parseInt(xml.attribute('errors').toString())
-
-        this.sessionId = prop.SauceOnDemandSessionID
-        this.filename = filename
-        setPassed(failures, errors)
+    JUnitTestReport(String file) {
+        Node xml = getXmlFromFile(file)
+        setPassed(xml)
+        sessionId = getSauceLabsSessionId(xml)
+        filename = file
     }
 
-    void setPassed(int failures, int errors) {
+    Node getXmlFromFile(String file) {
+        XmlParser xmlParser = new XmlParser()
+        xmlParser.parse(file)
+    }
+
+    void setPassed(Node node) {
+        int failures = getAttributeValue(node, 'failures')
+        int errors = getAttributeValue(node, 'errors')
         passed = failures + errors == 0
+    }
+
+    int getAttributeValue(Node node, String key) {
+        String value = node.attribute(key).toString()
+        Integer.parseInt(value)
+    }
+
+    String getSauceLabsSessionId(Node node) {
+        String systemOutCData = node.get('system-out').text()
+        StringReader stringReader = new StringReader(systemOutCData)
+        Properties properties = new Properties()
+        properties.load(stringReader)
+        properties.SauceOnDemandSessionID
     }
 
     void log() {

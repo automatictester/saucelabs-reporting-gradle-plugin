@@ -4,21 +4,21 @@ import groovy.io.FileType
 
 class JUnitReportHandler {
 
-    static List<String> getJUnitReports(String directory, String pattern) {
-        List<String> allFiles = getAllFiles(directory)
-        getFilteredFiles(allFiles, pattern)
+    static List<String> getJUnitReportFiles(String directory, String pattern) {
+        List<String> allJUnitReportFiles = getAllJUnitReportFilesRecursivelyFrom(directory)
+        getJUnitReportFilesMatchingPattern(allJUnitReportFiles, pattern)
     }
 
-    static List<String> getAllFiles(String directory) {
-        List<String> files = []
-        File dir = new File(directory)
-        dir.absoluteFile.eachFileRecurse(FileType.FILES) { file ->
-            files << file.path
+    static List<String> getAllJUnitReportFilesRecursivelyFrom(String directory) {
+        List<String> junitReportFiles = []
+        File directoryToSearch = new File(directory)
+        directoryToSearch.absoluteFile.eachFileRecurse(FileType.FILES) { junitReportFile ->
+            junitReportFiles << junitReportFile.path
         }
-        files
+        junitReportFiles
     }
 
-    static List<String> getFilteredFiles(List<String> files, String pattern) {
+    static List<String> getJUnitReportFilesMatchingPattern(List<String> files, String pattern) {
         files.findAll { it =~ pattern }
     }
 }

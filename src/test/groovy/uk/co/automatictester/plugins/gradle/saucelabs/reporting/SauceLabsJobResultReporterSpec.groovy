@@ -6,7 +6,7 @@ import spock.lang.Specification
 import spock.lang.Unroll
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension
 
-class SessionHandlerSpec extends Specification {
+class SauceLabsJobResultReporterSpec extends Specification {
 
     static final String SESSION_ID = 'xyz'
     static final String FILENAME = 'TEST-SampleTest.xml'
@@ -30,7 +30,7 @@ class SessionHandlerSpec extends Specification {
         SaucelabsReportingExtension cfg = Stub()
         JUnitTestReport testReport = Stub()
 
-        SessionHandler sessionHandler = new SessionHandler(cfg)
+        SauceLabsJobResultReporter sessionHandler = new SauceLabsJobResultReporter(cfg)
 
         and: 'JUnit test report stub is configured'
         testReport.passed >> reportResult
@@ -41,7 +41,7 @@ class SessionHandlerSpec extends Specification {
         cfg.actionOnFailure >> ActionOnFailure.WARNING
 
         when: 'Sauce session status is compared with session status in JUnit report'
-        sessionHandler.handleSessionStatusUpdate(sauceResult, testReport)
+        sessionHandler.compareResults(sauceResult, testReport)
 
         then: 'Inconsistency is correctly handled'
         if (isInconsistent) {
@@ -53,18 +53,18 @@ class SessionHandlerSpec extends Specification {
         where:
         sauceResult | reportResult | isInconsistent | message
         true        | true         | false          | null
-        true        | false        | true           | "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: true\nExpected status: false\n"
-        false       | true         | true           | "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: false\nExpected status: true\n"
+        true        | false        | true           | "\nSauceLabs job '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: true\nExpected status: false\n"
+        false       | true         | true           | "\nSauceLabs job '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: false\nExpected status: true\n"
         false       | false        | false          | null
-        null        | true         | true           | "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: null\nExpected status: true\n"
-        null        | false        | true           | "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: null\nExpected status: false\n"
+        null        | true         | true           | "\nSauceLabs job '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: null\nExpected status: true\n"
+        null        | false        | true           | "\nSauceLabs job '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: null\nExpected status: false\n"
     }
 
     void 'Should handle results inconsistency correctly for actionOnFailure set to ActionOnFailure.WARNING'() {
         given: 'Mocks are in place'
         SaucelabsReportingExtension cfg = Stub()
         JUnitTestReport testReport = Stub()
-        SessionHandler sessionHandler = new SessionHandler(cfg)
+        SauceLabsJobResultReporter sessionHandler = new SauceLabsJobResultReporter(cfg)
 
         and: 'JUnit test report stub is configured'
         testReport.passed >> false
@@ -72,13 +72,13 @@ class SessionHandlerSpec extends Specification {
         testReport.filename >> FILENAME
 
         and: 'Expected message is set'
-        String message = "\nSession '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: true\nExpected status: false\n"
+        String message = "\nSauceLabs job '${SESSION_ID}' for ${FILENAME} was not updated\nStatus in Sauce Labs: true\nExpected status: false\n"
 
         and: 'Plugin extension is configured'
         cfg.actionOnFailure >> ActionOnFailure.WARNING
 
         when: 'Sauce session status is compared with session status in JUnit report'
-        sessionHandler.handleSessionStatusUpdate(true, testReport)
+        sessionHandler.compareResults(true, testReport)
 
         then: 'Message is sent to STDOUT as expected'
         out.contains(message)
@@ -88,16 +88,16 @@ class SessionHandlerSpec extends Specification {
         given: 'Mocks are in place'
         SaucelabsReportingExtension cfg = Stub()
         JUnitTestReport testReport = Stub()
-        SessionHandler sessionHandler = new SessionHandler(cfg)
+
+        and: 'Plugin extension is configured'
+        cfg.actionOnFailure >> ActionOnFailure.ERROR
+        SauceLabsJobResultReporter sessionHandler = new SauceLabsJobResultReporter(cfg)
 
         and: 'JUnit test report stub is configured'
         testReport.passed >> false
 
-        and: 'Plugin extension is configured'
-        cfg.actionOnFailure >> ActionOnFailure.ERROR
-
         when: 'Sauce session status is compared with session status in JUnit report'
-        sessionHandler.handleSessionStatusUpdate(true, testReport)
+        sessionHandler.compareResults(true, testReport)
 
         then: 'Expected action takes place'
         thrown(GradleException)

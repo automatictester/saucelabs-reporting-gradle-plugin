@@ -4,19 +4,28 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.JUnitReportHandler
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.JUnitTestReport
-import uk.co.automatictester.plugins.gradle.saucelabs.reporting.SessionHandler
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.SauceLabsJobResultReporter
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension
 
 class ReportToSauceLabsTask extends DefaultTask {
 
+    SaucelabsReportingExtension config
+
     @TaskAction
     void reportToSauceLabs() {
-        SaucelabsReportingExtension cfg = project.extensions.findByType(SaucelabsReportingExtension)
-        List<String> junitReports = JUnitReportHandler.getJUnitReports(cfg.testResultsDir, cfg.filenamePattern)
+        config = project.extensions.findByType(SaucelabsReportingExtension)
+        String testResultsDir = config.testResultsDir
+        String filenamePattern = config.filenamePattern
 
-        junitReports.each {
-            JUnitTestReport testReport = new JUnitTestReport(it)
-            new SessionHandler(cfg).updateSessionResult(testReport)
+        List<String> junitReportFiles = JUnitReportHandler.getJUnitReportFiles(testResultsDir, filenamePattern)
+        processJUnitReports(junitReportFiles)
+    }
+
+    void processJUnitReports(List<String> junitReportFiles) {
+        SauceLabsJobResultReporter sauceLabsJobResultReporter = new SauceLabsJobResultReporter(config)
+        junitReportFiles.each { junitReportFile ->
+            JUnitTestReport jUnitTestReport = new JUnitTestReport(junitReportFile)
+            sauceLabsJobResultReporter.updateResult(jUnitTestReport)
         }
     }
 }

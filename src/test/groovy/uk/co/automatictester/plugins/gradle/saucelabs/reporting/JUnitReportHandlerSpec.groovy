@@ -17,7 +17,7 @@ class JUnitReportHandlerSpec extends Specification {
         ]
 
         when:
-        List<String> foundJUnitReports = JUnitReportHandler.getJUnitReports(dir, /TEST-(.)*\.xml/)
+        List<String> foundJUnitReports = JUnitReportHandler.getJUnitReportFiles(dir, /TEST-(.)*\.xml/)
 
         then:
         foundJUnitReports.containsAll(expectedJUnitReports)

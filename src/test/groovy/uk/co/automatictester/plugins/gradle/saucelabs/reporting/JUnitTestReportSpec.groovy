@@ -7,19 +7,16 @@ class JUnitTestReportSpec extends Specification {
 
     @Unroll
     void "should set test status to #passed - failures: #failures, errors: #errors"() {
-        given: 'Fake JUnit test report is loaded'
-        String junitTestReport = 'src/test/resources/unit/TEST-FakeTest.xml'
-        JUnitTestReport report = new JUnitTestReport(junitTestReport)
-
-        when: 'We override test results'
-        report.setPassed(failures, errors)
+        when: 'JUnit test report is loaded'
+        String junitResultFile = "src/test/resources/unit/TEST-FakeTest-${failures}${errors}.xml"
+        JUnitTestReport junitTestReport = new JUnitTestReport(junitResultFile)
 
         then: 'Status is set accordingly'
-        report.passed == passed
+        junitTestReport.passed == passed
 
         and: 'All other values also match'
-        report.filename == junitTestReport
-        report.sessionId == 'xyz'
+        junitTestReport.filename == junitResultFile
+        junitTestReport.sessionId == 'xyz'
 
         where:
         failures | errors | passed

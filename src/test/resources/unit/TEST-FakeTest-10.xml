@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="FakeTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2017-03-05T19:26:32" hostname="eureka" time="2.069">
+  <properties/>
+  <testcase name="Fake" classname="FakeTest" time="2.069"/>
+  <system-out><![CDATA[SauceOnDemandSessionID=xyz
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
