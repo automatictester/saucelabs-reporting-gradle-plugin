@@ -3,7 +3,7 @@ package uk.co.automatictester.plugins.gradle.saucelabs.reporting.task
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.JUnitReportHandler
-import uk.co.automatictester.plugins.gradle.saucelabs.reporting.JUnitTestReport
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.JUnitReport
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.SauceLabsJobResultReporter
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension
 
@@ -24,8 +24,8 @@ class ReportToSauceLabsTask extends DefaultTask {
     void processJUnitReports(List<String> junitReportFiles) {
         SauceLabsJobResultReporter sauceLabsJobResultReporter = new SauceLabsJobResultReporter(config)
         junitReportFiles.each { junitReportFile ->
-            JUnitTestReport jUnitTestReport = new JUnitTestReport(junitReportFile)
-            sauceLabsJobResultReporter.updateResult(jUnitTestReport)
+            JUnitReport junitReport = new JUnitReport(junitReportFile)
+            sauceLabsJobResultReporter.updateResult(junitReport)
         }
     }
 }

@@ -3,13 +3,13 @@ package uk.co.automatictester.plugins.gradle.saucelabs.reporting
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class JUnitTestReportSpec extends Specification {
+class JUnitReportSpec extends Specification {
 
     @Unroll
     void "should set test status to #passed - failures: #failures, errors: #errors"() {
         when: 'JUnit test report is loaded'
         String junitResultFile = "src/test/resources/unit/TEST-FakeTest-${failures}${errors}.xml"
-        JUnitTestReport junitTestReport = new JUnitTestReport(junitResultFile)
+        JUnitReport junitTestReport = new JUnitReport(junitResultFile)
 
         then: 'Status is set accordingly'
         junitTestReport.passed == passed

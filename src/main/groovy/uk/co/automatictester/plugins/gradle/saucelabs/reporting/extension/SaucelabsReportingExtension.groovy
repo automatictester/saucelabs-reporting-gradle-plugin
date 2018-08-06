@@ -1,6 +1,6 @@
 package uk.co.automatictester.plugins.gradle.saucelabs.reporting.extension
 
-import uk.co.automatictester.plugins.gradle.saucelabs.reporting.ActionOnFailure
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.enums.ActionOnFailure
 
 class SaucelabsReportingExtension {
 

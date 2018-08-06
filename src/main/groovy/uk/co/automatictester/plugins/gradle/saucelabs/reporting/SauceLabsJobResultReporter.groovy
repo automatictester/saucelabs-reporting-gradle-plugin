@@ -3,6 +3,7 @@ package uk.co.automatictester.plugins.gradle.saucelabs.reporting
 import com.saucelabs.saucerest.SauceREST
 import groovy.json.JsonSlurper
 import org.gradle.api.GradleException
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.enums.ActionOnFailure
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension
 
 class SauceLabsJobResultReporter {
@@ -17,39 +18,43 @@ class SauceLabsJobResultReporter {
         actionOnFailure = config.actionOnFailure
     }
 
-    void updateResult(JUnitTestReport junitTestReport) {
+    void updateResult(JUnitReport junitReport) {
         Map<String, Boolean> sauceLabsJobUpdates = [:]
-        boolean passed = junitTestReport.passed
+        boolean passed = junitReport.passed
         sauceLabsJobUpdates.put('passed', passed)
-        junitTestReport.log()
+        junitReport.log()
 
-        String sauceLabsJobId = junitTestReport.sessionId
+        String sauceLabsJobId = junitReport.sessionId
         sauceLabsRestClient.updateJobInfo(sauceLabsJobId, sauceLabsJobUpdates)
-        checkIfUpdateSuccessful(junitTestReport)
+        checkIfUpdateSuccessful(junitReport)
     }
 
-    void checkIfUpdateSuccessful(JUnitTestReport jUnitTestReport) {
-        String sauceLabsJobId = sauceLabsRestClient.getJobInfo(jUnitTestReport.sessionId)
-        Boolean sauceLabsJobResult = new JsonSlurper().parseText(sauceLabsJobId).passed
-        compareResults(sauceLabsJobResult, jUnitTestReport)
+    void checkIfUpdateSuccessful(JUnitReport jUnitReport) {
+        String sauceLabsJobId = sauceLabsRestClient.getJobInfo(jUnitReport.sessionId)
+        Boolean sauceLabsJobPassed = new JsonSlurper().parseText(sauceLabsJobId).passed
+        compareResults(sauceLabsJobPassed, jUnitReport)
     }
 
-    void compareResults(Boolean sauceLabsJobResult, JUnitTestReport junitTestReport) {
-        String sauceLabsJobId = junitTestReport.sessionId
-        String junitTestReportFile = junitTestReport.filename
-        boolean junitTestPassed = junitTestReport.passed
+    void compareResults(Boolean sauceLabsJobPassed, JUnitReport junitReport) {
+        String sauceLabsJobId = junitReport.sessionId
+        String junitTestReportFile = junitReport.filename
+        boolean junitTestPassed = junitReport.passed
 
-        if (sauceLabsJobResult != junitTestPassed) {
-            String message = createMessage(sauceLabsJobId, junitTestReportFile, sauceLabsJobResult, junitTestPassed)
+        if (isResultDifferent(sauceLabsJobPassed, junitTestPassed)) {
+            String message = createMessage(sauceLabsJobId, junitTestReportFile, sauceLabsJobPassed, junitTestPassed)
             throwExceptionOrLogWarning(message)
         }
     }
 
-    String createMessage(String sauceLabsJobId, String junitTestReportFile, Boolean sauceLabsJobResult, boolean junitTestPassed) {
+    static boolean isResultDifferent(Boolean sauceLabsJobPassed, boolean junitTestPassed) {
+        sauceLabsJobPassed != junitTestPassed
+    }
+
+    static String createMessage(String sauceLabsJobId, String junitTestReportFile, Boolean sauceLabsJobPassed, boolean junitTestPassed) {
         """
 
 SauceLabs job '${sauceLabsJobId}' for ${junitTestReportFile} was not updated
-Status in Sauce Labs: ${sauceLabsJobResult}
+Status in Sauce Labs: ${sauceLabsJobPassed}
 Expected status: ${junitTestPassed}
 
 """

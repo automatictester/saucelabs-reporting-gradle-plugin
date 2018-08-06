@@ -5,7 +5,7 @@ import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
 import spock.lang.Unroll
-import uk.co.automatictester.plugins.gradle.saucelabs.reporting.helpers.SessionCleanupHelper
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.helpers.SauceLabsJob
 
 import static org.gradle.internal.impldep.org.hamcrest.MatcherAssert.assertThat
 import static org.gradle.internal.impldep.org.hamcrest.core.Is.is
@@ -58,8 +58,8 @@ class ReportToSauceLabsTaskIntegrationSpec extends Specification {
         List<String> junitReportFiles = JUnitReportHandler.getJUnitReportFiles('src/integrationTest/resources/build/test-results', /TEST-(.)*\.xml/)
 
         junitReportFiles.each {
-            JUnitTestReport testReport = new JUnitTestReport(it)
-            SessionCleanupHelper.deleteSession(testReport)
+            JUnitReport junitReport = new JUnitReport(it)
+            SauceLabsJob.deleteJob(junitReport)
         }
 
         where: 'Gradle versions'

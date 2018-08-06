@@ -1,18 +1,18 @@
 package uk.co.automatictester.plugins.gradle.saucelabs.reporting
 
-class JUnitTestReport {
+class JUnitReport {
     String filename
     String sessionId
     boolean passed
 
-    JUnitTestReport(String file) {
+    JUnitReport(String file) {
         Node xml = getXmlFromFile(file)
         setPassed(xml)
         sessionId = getSauceLabsSessionId(xml)
         filename = file
     }
 
-    Node getXmlFromFile(String file) {
+    static Node getXmlFromFile(String file) {
         XmlParser xmlParser = new XmlParser()
         xmlParser.parse(file)
     }
@@ -23,12 +23,12 @@ class JUnitTestReport {
         passed = failures + errors == 0
     }
 
-    int getAttributeValue(Node node, String key) {
+    static int getAttributeValue(Node node, String key) {
         String value = node.attribute(key).toString()
         Integer.parseInt(value)
     }
 
-    String getSauceLabsSessionId(Node node) {
+    static String getSauceLabsSessionId(Node node) {
         String systemOutCData = node.get('system-out').text()
         StringReader stringReader = new StringReader(systemOutCData)
         Properties properties = new Properties()
