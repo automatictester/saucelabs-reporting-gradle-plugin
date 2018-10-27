@@ -8,4 +8,4 @@ jobs:
       TERM: dumb
     steps:
       - checkout
-      - run: ./gradlew clean test
+      - run: ./gradlew clean check -x iT
