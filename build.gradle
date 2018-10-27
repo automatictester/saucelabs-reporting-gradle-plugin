@@ -88,6 +88,12 @@ publishing {
     }
 }
 
+tasks.withType(Test) {
+    testLogging {
+        events "started", "passed", "skipped", "failed"
+    }
+}
+
 uploadArchives {
     repositories {
         mavenDeployer {

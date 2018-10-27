@@ -9,5 +9,3 @@ jobs:
     steps:
       - checkout
       - run: ./gradlew clean check -x iT
-      - store_test_results:
-          path: /tmp/test-results
