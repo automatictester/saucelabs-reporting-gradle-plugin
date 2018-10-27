@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/saucelabs-reporting-gradle-plugin
+    docker:
+      - image: circleci/openjdk:8-jdk
+    environment:
+      TERM: dumb
+    steps:
+      - checkout
+      - run: ./gradlew clean check -x iT
