@@ -1,0 +1,9 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/saucelabs-reporting-gradle-plugin
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - run: ./gradlew clean test
