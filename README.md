@@ -1,7 +1,7 @@
 # saucelabs-reporting-gradle-plugin
 Sauce Labs Reporting Gradle Plugin
 
-[![CircleCI](https://circleci.com/gh/automatictester/saucelabs-reporting-gradle-plugin/tree/master.svg?style=svg)](https://circleci.com/gh/automatictester/saucelabs-reporting-gradle-plugin/tree/master)
+[![Build Status](https://travis-ci.com/automatictester/saucelabs-reporting-gradle-plugin.svg?branch=master)](https://travis-ci.com/automatictester/saucelabs-reporting-gradle-plugin)
 [![Central status](https://maven-badges.herokuapp.com/maven-central/uk.co.automatictester/saucelabs-reporting-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/uk.co.automatictester/saucelabs-reporting-gradle-plugin)
 
 Gradle plugin which reports test results back to [Sauce Labs][1].
