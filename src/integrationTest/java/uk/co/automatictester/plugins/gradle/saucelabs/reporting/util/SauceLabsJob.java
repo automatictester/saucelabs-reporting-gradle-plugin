@@ -13,7 +13,7 @@ public class SauceLabsJob {
     public static void deleteJob(JunitReport junitReport) {
         junitReport.log();
         SauceREST sauceLabsRestClient = new SauceREST(sauceUser, sauceKey);
-        String sessionId = junitReport.sessionId;
+        String sessionId = junitReport.getSessionId();
         sauceLabsRestClient.deleteJob(sessionId);
     }
 }
