@@ -41,7 +41,10 @@ Once you applied the plugin, you need to configure it:
 saucelabsReportingSettings {
 
     // Filename pattern of JUnit reports. In most cases, stick to the default.
+    // Version 1.2.0 and earlier:
     // filenamePattern = /TEST-(.)*\.xml/
+    // Versions later than 1.2.0:
+    // filenamePattern = "(.)*TEST-(.)*\\.xml"
 
     // Where to find JUnit reports. This will depend on your project setup and Gradle version being used.
     testResultsDir = 'build/test-results'
