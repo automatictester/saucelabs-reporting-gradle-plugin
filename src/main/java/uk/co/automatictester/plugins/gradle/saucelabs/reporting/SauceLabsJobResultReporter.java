@@ -24,17 +24,17 @@ public class SauceLabsJobResultReporter {
 
     public void updateResult(JunitReport junitReport) {
         Map<String, Object> sauceLabsJobUpdates = new HashMap<>();
-        boolean passed = junitReport.passed;
+        boolean passed = junitReport.isPassed();
         sauceLabsJobUpdates.put("passed", passed);
         junitReport.log();
 
-        String sauceLabsJobId = junitReport.sessionId;
+        String sauceLabsJobId = junitReport.getSessionId();
         sauceLabsRestClient.updateJobInfo(sauceLabsJobId, sauceLabsJobUpdates);
         checkIfUpdateSuccessful(junitReport);
     }
 
     private void checkIfUpdateSuccessful(JunitReport junitReport) {
-        String jobInfo = sauceLabsRestClient.getJobInfo(junitReport.sessionId);
+        String jobInfo = sauceLabsRestClient.getJobInfo(junitReport.getSessionId());
         String passed;
         try {
             JSONObject jsonObject = new JSONObject(jobInfo);
@@ -47,9 +47,9 @@ public class SauceLabsJobResultReporter {
     }
 
     public void compareResults(Boolean sauceLabsJobPassed, JunitReport junitReport) {
-        String sauceLabsJobId = junitReport.sessionId;
-        String junitTestReportFile = junitReport.filename;
-        boolean junitTestPassed = junitReport.passed;
+        String sauceLabsJobId = junitReport.getSessionId();
+        String junitTestReportFile = junitReport.getFilename();
+        boolean junitTestPassed = junitReport.isPassed();
 
         if (isResultDifferent(sauceLabsJobPassed, junitTestPassed)) {
             String message = createMessage(sauceLabsJobId, junitTestReportFile, sauceLabsJobPassed, junitTestPassed);

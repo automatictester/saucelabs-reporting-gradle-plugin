@@ -15,9 +15,10 @@ import java.util.Properties;
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_TIME;
 
 public class JunitReport {
-    public String filename; // TODO: public -> private
-    public String sessionId;
-    public boolean passed;
+
+    private String filename;
+    private String sessionId;
+    private boolean passed;
 
     public JunitReport(String file) {
         Element element = getRootElement(file);
@@ -70,5 +71,29 @@ public class JunitReport {
         System.out.println("Filename:     " + filename);
         System.out.println("SessionId:    " + sessionId);
         System.out.println("Passed:       " + passed);
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public boolean isPassed() {
+        return passed;
+    }
+
+    public void setPassed(boolean passed) {
+        this.passed = passed;
     }
 }

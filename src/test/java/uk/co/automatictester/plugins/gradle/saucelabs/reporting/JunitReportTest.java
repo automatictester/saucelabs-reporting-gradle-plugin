@@ -9,11 +9,11 @@ public class JunitReportTest {
 
     @Test(dataProvider = "input")
     public void testReport(int failures, int errors, boolean passed) {
-        String junitResultFile = String.format("src/test/resources/unit/TEST-FakeTest-%s%s.xml", failures, errors);
-        JunitReport junitTestReport = new JunitReport(junitResultFile);
-        assertEquals(junitTestReport.passed, passed);
-        assertEquals(junitTestReport.filename, junitResultFile);
-        assertEquals(junitTestReport.sessionId, "xyz");
+        String junitFile = String.format("src/test/resources/unit/TEST-FakeTest-%s%s.xml", failures, errors);
+        JunitReport junitReport = new JunitReport(junitFile);
+        assertEquals(junitReport.isPassed(), passed);
+        assertEquals(junitReport.getFilename(), junitFile);
+        assertEquals(junitReport.getSessionId(), "xyz");
     }
 
     @DataProvider(name = "input")

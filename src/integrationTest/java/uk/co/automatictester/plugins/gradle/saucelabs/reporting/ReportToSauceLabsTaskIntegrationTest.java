@@ -42,7 +42,7 @@ public class ReportToSauceLabsTaskIntegrationTest {
 
         BuildResult reportResult = runner
                 .withArguments(REPORT_TO_SAUCELABS)
-                .build(); // TODO: revert
+                .build();
         System.out.print(reportResult.getOutput());
         assertEquals(reportResult.task(REPORT_TO_SAUCELABS).getOutcome(), SUCCESS);
 
