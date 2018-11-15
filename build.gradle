@@ -12,12 +12,11 @@ buildscript {
 group = 'uk.co.automatictester'
 version = sauceReportingGradlePluginVersion
 
-apply plugin: 'groovy'
+apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'signing'
-apply plugin: 'codenarc'
 apply plugin: 'com.gradle.plugin-publish'
 
 sourceSets {
@@ -42,7 +41,9 @@ task integrationTest(type: Test) {
     outputs.upToDateWhen { false }
 
     doFirst {
-        println "\nThis task takes a while to execute, due to Gradle compatibility tests and integration tests with Sauce Labs. Subsequent executions will be significantly faster but still time consuming.\n"
+        println "\nThis task takes a while to execute, due to Gradle compatibility tests " +
+                "and integration tests with Sauce Labs.\nSubsequent executions will be significantly faster " +
+                "but still time consuming.\n"
     }
     systemProperties System.properties
 }
@@ -51,23 +52,17 @@ check.dependsOn integrationTest
 integrationTest.mustRunAfter test
 
 tasks.withType(Test) {
+    useTestNG()
     reports.html.destination = file("${reporting.baseDir}/${name}")
+    testLogging {
+        events "started", "passed", "skipped", "failed"
+    }
 }
-
-codenarc {
-    toolVersion = '0.27.0'
-}
-
-codenarcMain.configFile = rootProject.file('config/codenarc/rules.groovy')
-codenarcTest.configFile = codenarcMain.configFile
-codenarcIntegrationTest.configFile = codenarcMain.configFile
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.4'
     compile 'com.saucelabs:saucerest:1.0.35'
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-    testCompile "cglib:cglib:2.2"
-    testCompile "org.objenesis:objenesis:2.5.1"
+    testCompile 'org.testng:testng:6.14.3'
+    testCompile 'org.mockito:mockito-core:1.10.19'
 }
 
 repositories {
@@ -85,12 +80,6 @@ publishing {
 
             from components.java
         }
-    }
-}
-
-tasks.withType(Test) {
-    testLogging {
-        events "started", "passed", "skipped", "failed"
     }
 }
 

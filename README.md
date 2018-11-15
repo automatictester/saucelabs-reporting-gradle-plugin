@@ -28,7 +28,7 @@ buildscript {
     }
     dependencies {
         // always check maven central badge above for most recent released version number
-        classpath "uk.co.automatictester:saucelabs-reporting-gradle-plugin:1.1.0"
+        classpath "uk.co.automatictester:saucelabs-reporting-gradle-plugin:1.2.0"
     }
 }
 
