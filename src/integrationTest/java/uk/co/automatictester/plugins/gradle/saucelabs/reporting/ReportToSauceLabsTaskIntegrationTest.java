@@ -46,7 +46,7 @@ public class ReportToSauceLabsTaskIntegrationTest {
         System.out.print(reportResult.getOutput());
         assertEquals(reportResult.task(REPORT_TO_SAUCELABS).getOutcome(), SUCCESS);
 
-        List<String> junitReports = JunitReportHandler.getJunitFiles("src/integrationTest/resources/build/TEST-results", "(.)*TEST-(.)*\\.xml");
+        List<String> junitReports = JunitReportHandler.getJunitFiles("src/integrationTest/resources/build/test-results", "(.)*TEST-(.)*\\.xml");
         junitReports.forEach(report -> {
             JunitReport junitReport = new JunitReport(report);
             SauceLabsJob.deleteJob(junitReport);
