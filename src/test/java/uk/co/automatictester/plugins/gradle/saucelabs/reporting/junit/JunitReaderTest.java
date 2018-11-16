@@ -1,19 +1,19 @@
-package uk.co.automatictester.plugins.gradle.saucelabs.reporting;
+package uk.co.automatictester.plugins.gradle.saucelabs.reporting.junit;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-public class JunitReportTest {
+public class JunitReaderTest {
 
     @Test(dataProvider = "input")
     public void testReport(int failures, int errors, boolean passed) {
         String junitFile = String.format("src/test/resources/unit/TEST-FakeTest-%s%s.xml", failures, errors);
-        JunitReport junitReport = new JunitReport(junitFile);
-        assertEquals(junitReport.isPassed(), passed);
-        assertEquals(junitReport.getFilename(), junitFile);
-        assertEquals(junitReport.getSessionId(), "xyz");
+        JunitReport report = JunitReader.read(junitFile);
+        assertEquals(report.isPassed(), passed);
+        assertEquals(report.getFilename(), junitFile);
+        assertEquals(report.getSessionId(), "xyz");
     }
 
     @DataProvider(name = "input")

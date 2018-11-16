@@ -6,35 +6,36 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.enums.ActionOnFailure;
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension;
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.junit.JunitReport;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SauceLabsJobResultReporter {
+public class SauceLabsReporter {
 
     private SauceREST sauceLabsRestClient;
     private ActionOnFailure actionOnFailure;
 
-    public SauceLabsJobResultReporter(SaucelabsReportingExtension config) {
+    public SauceLabsReporter(SaucelabsReportingExtension config) {
         String user = config.user;
         String key = config.key;
         sauceLabsRestClient = new SauceREST(user, key);
         actionOnFailure = config.actionOnFailure;
     }
 
-    public void updateResult(JunitReport junitReport) {
+    public void updateResult(JunitReport report) {
         Map<String, Object> sauceLabsJobUpdates = new HashMap<>();
-        boolean passed = junitReport.isPassed();
+        boolean passed = report.isPassed();
         sauceLabsJobUpdates.put("passed", passed);
-        junitReport.log();
+        report.log();
 
-        String sauceLabsJobId = junitReport.getSessionId();
+        String sauceLabsJobId = report.getSessionId();
         sauceLabsRestClient.updateJobInfo(sauceLabsJobId, sauceLabsJobUpdates);
-        checkIfUpdateSuccessful(junitReport);
+        checkIfUpdateSuccessful(report);
     }
 
-    private void checkIfUpdateSuccessful(JunitReport junitReport) {
-        String jobInfo = sauceLabsRestClient.getJobInfo(junitReport.getSessionId());
+    private void checkIfUpdateSuccessful(JunitReport report) {
+        String jobInfo = sauceLabsRestClient.getJobInfo(report.getSessionId());
         String passed;
         try {
             JSONObject jsonObject = new JSONObject(jobInfo);
@@ -43,13 +44,13 @@ public class SauceLabsJobResultReporter {
             throw new RuntimeException(e);
         }
         Boolean sauceLabsJobPassed = passed.equals("true");
-        compareResults(sauceLabsJobPassed, junitReport);
+        compareResults(sauceLabsJobPassed, report);
     }
 
-    public void compareResults(Boolean sauceLabsJobPassed, JunitReport junitReport) {
-        String sauceLabsJobId = junitReport.getSessionId();
-        String junitTestReportFile = junitReport.getFilename();
-        boolean junitTestPassed = junitReport.isPassed();
+    void compareResults(Boolean sauceLabsJobPassed, JunitReport report) {
+        String sauceLabsJobId = report.getSessionId();
+        String junitTestReportFile = report.getFilename();
+        boolean junitTestPassed = report.isPassed();
 
         if (isResultDifferent(sauceLabsJobPassed, junitTestPassed)) {
             String message = createMessage(sauceLabsJobId, junitTestReportFile, sauceLabsJobPassed, junitTestPassed);

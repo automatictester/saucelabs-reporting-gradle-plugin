@@ -5,6 +5,10 @@ import org.gradle.testkit.runner.BuildTask;
 import org.gradle.testkit.runner.GradleRunner;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension;
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.junit.JunitFileCollector;
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.junit.JunitReader;
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.junit.JunitReport;
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.util.SauceLabsJob;
 
 import java.io.File;
@@ -46,10 +50,14 @@ public class ReportToSauceLabsTaskIntegrationTest {
         System.out.print(reportResult.getOutput());
         assertEquals(reportResult.task(REPORT_TO_SAUCELABS).getOutcome(), SUCCESS);
 
-        List<String> junitReports = JunitReportHandler.getJunitFiles("src/integrationTest/resources/build/test-results", "(.)*TEST-(.)*\\.xml");
-        junitReports.forEach(report -> {
-            JunitReport junitReport = new JunitReport(report);
-            SauceLabsJob.deleteJob(junitReport);
+        SaucelabsReportingExtension config = new SaucelabsReportingExtension();
+        config.testResultsDir = "src/integrationTest/resources/build/test-results";
+        config.filenamePattern = "(.)*TEST-(.)*\\.xml";
+
+        List<String> files = JunitFileCollector.getFiles(config);
+        files.forEach(file -> {
+            JunitReport report = JunitReader.read(file);
+            SauceLabsJob.deleteJob(report);
         });
     }
 

@@ -7,13 +7,14 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.enums.ActionOnFailure;
 import uk.co.automatictester.plugins.gradle.saucelabs.reporting.extension.SaucelabsReportingExtension;
+import uk.co.automatictester.plugins.gradle.saucelabs.reporting.junit.JunitReport;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class SauceLabsJobResultReporterTest extends ConsoleOutputTest {
+public class SauceLabsReporterTest extends ConsoleOutputTest {
 
     private static final String SESSION_ID = "xyz";
     private static final String FILENAME = "TEST-SampleTest.xml";
@@ -30,16 +31,16 @@ public class SauceLabsJobResultReporterTest extends ConsoleOutputTest {
 
     @Test(dataProvider = "input")
     public void detectResultInconsistency(Boolean sauceResult, Boolean reportResult, Boolean isInconsistent, String message) {
-        SaucelabsReportingExtension cfg = mock(SaucelabsReportingExtension.class);
+        SaucelabsReportingExtension cfg = new SaucelabsReportingExtension();
         cfg.actionOnFailure = ActionOnFailure.WARNING;
 
-        JunitReport junitReport = mock(JunitReport.class);
-        when(junitReport.isPassed()).thenReturn(reportResult);
-        when(junitReport.getSessionId()).thenReturn(SESSION_ID);
-        when(junitReport.getFilename()).thenReturn(FILENAME);
+        JunitReport report = mock(JunitReport.class);
+        when(report.isPassed()).thenReturn(reportResult);
+        when(report.getSessionId()).thenReturn(SESSION_ID);
+        when(report.getFilename()).thenReturn(FILENAME);
 
-        SauceLabsJobResultReporter sessionHandler = new SauceLabsJobResultReporter(cfg);
-        sessionHandler.compareResults(sauceResult, junitReport);
+        SauceLabsReporter reporter = new SauceLabsReporter(cfg);
+        reporter.compareResults(sauceResult, report);
 
         if (isInconsistent) {
             assertTrue(out.toString().contains(message));
@@ -63,16 +64,16 @@ public class SauceLabsJobResultReporterTest extends ConsoleOutputTest {
 
     @Test
     public void logWarningOnResultInconsistency() {
-        SaucelabsReportingExtension cfg = mock(SaucelabsReportingExtension.class);
+        SaucelabsReportingExtension cfg = new SaucelabsReportingExtension();
         cfg.actionOnFailure = ActionOnFailure.WARNING;
 
-        JunitReport junitReport = mock(JunitReport.class);
-        when(junitReport.isPassed()).thenReturn(false);
-        when(junitReport.getSessionId()).thenReturn(SESSION_ID);
-        when(junitReport.getFilename()).thenReturn(FILENAME);
+        JunitReport report = mock(JunitReport.class);
+        when(report.isPassed()).thenReturn(false);
+        when(report.getSessionId()).thenReturn(SESSION_ID);
+        when(report.getFilename()).thenReturn(FILENAME);
 
-        SauceLabsJobResultReporter reporter = new SauceLabsJobResultReporter(cfg);
-        reporter.compareResults(true, junitReport);
+        SauceLabsReporter reporter = new SauceLabsReporter(cfg);
+        reporter.compareResults(true, report);
 
         String message = String.format("\nSauceLabs job '%s' for %s was not updated\nStatus in Sauce Labs: true\nExpected status: false\n",
                 SESSION_ID, FILENAME);
@@ -81,13 +82,13 @@ public class SauceLabsJobResultReporterTest extends ConsoleOutputTest {
 
     @Test(expectedExceptions = GradleException.class)
     public void throwErrorOnResultInconsistency() {
-        SaucelabsReportingExtension cfg = mock(SaucelabsReportingExtension.class);
+        SaucelabsReportingExtension cfg = new SaucelabsReportingExtension();
         cfg.actionOnFailure = ActionOnFailure.ERROR;
 
-        JunitReport junitReport = mock(JunitReport.class);
-        when(junitReport.isPassed()).thenReturn(false);
+        JunitReport report = mock(JunitReport.class);
+        when(report.isPassed()).thenReturn(false);
 
-        SauceLabsJobResultReporter reporter = new SauceLabsJobResultReporter(cfg);
-        reporter.compareResults(true, junitReport);
+        SauceLabsReporter reporter = new SauceLabsReporter(cfg);
+        reporter.compareResults(true, report);
     }
 }
