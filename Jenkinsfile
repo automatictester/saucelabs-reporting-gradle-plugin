@@ -7,8 +7,7 @@ pipeline {
     parameters {
         string(name: 'RELEASE_VERSION', defaultValue: '9.0.0', description: '')
         string(name: 'SNAPSHOT_VERSION', defaultValue: '9.0.1-SNAPSHOT', description: '')
-        string(name: 'TEST_ONLY', defaultValue: 'true', description: '')
-        string(name: 'DRY_RUN', defaultValue: 'true', description: '')
+        booleanParam(name: 'RELEASE', defaultValue: false, description: '')
     }
     options {
         timestamps()
@@ -30,11 +29,6 @@ pipeline {
             }
         }
         stage('Set release version number') {
-            when {
-                expression {
-                    "${params.TEST_ONLY}" == "false"
-                }
-            }
             steps {
                 sh "sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${params.RELEASE_VERSION}/\" gradle.properties"
                 sh "cat gradle.properties"
@@ -64,11 +58,6 @@ pipeline {
             }
         }
         stage('Tag release') {
-            when {
-                expression {
-                    "${params.TEST_ONLY}" == "false"
-                }
-            }
             steps {
                 sh "git tag ${params.RELEASE_VERSION}"
             }
@@ -76,7 +65,7 @@ pipeline {
         stage('Release artefacts') {
             when {
                 expression {
-                    "${params.TEST_ONLY}" == "false" && "${params.DRY_RUN}" == "false" && "${env.BRANCH_NAME}" == "master"
+                    "${params.RELEASE}".toBoolean() && "${env.BRANCH_NAME}" == "master"
                 }
             }
             steps {
@@ -87,11 +76,6 @@ pipeline {
             }
         }
         stage('Set snapshot version number') {
-            when {
-                expression {
-                    "${params.TEST_ONLY}" == "false"
-                }
-            }
             steps {
                 sh "sed -i -e \"/sauceReportingGradlePluginVersion=/ s/=.*/=${params.SNAPSHOT_VERSION}/\" gradle.properties"
                 sh "cat gradle.properties"
@@ -101,7 +85,7 @@ pipeline {
         stage('Push release to origin') {
             when {
                 expression {
-                    "${params.TEST_ONLY}" == "false" && "${params.DRY_RUN}" == "false" && "${env.BRANCH_NAME}" == "master"
+                    "${params.RELEASE}".toBoolean() && "${env.BRANCH_NAME}" == "master"
                 }
             }
             steps {
