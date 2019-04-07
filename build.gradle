@@ -62,7 +62,7 @@ tasks.withType(Test) {
 dependencies {
     compile 'com.saucelabs:saucerest:1.0.35'
     testCompile 'org.testng:testng:6.14.3'
-    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.mockito:mockito-core:2.26.0'
 }
 
 repositories {
