@@ -70,7 +70,7 @@ pipeline {
             }
             steps {
                 // Maven Central
-                sh "./gradlew clean uploadArchives -i"
+                sh "./gradlew clean uploadArchives closeAndReleaseRepository -i"
                 // Gradle Plugin Portal
                 sh "./gradlew clean publishPlugins -i"
             }
