@@ -41,7 +41,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'build/test-results/*.xml'
+                    junit 'build/test-results/test/TEST-*.xml'
                 }
             }
         }
@@ -50,11 +50,10 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'sauce-labs-job-creds', usernameVariable: 'SL_USER', passwordVariable: 'SL_KEY')]) {
                     sh "./gradlew clean check -x test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
                 }
-                sh 'ls -lR'
             }
             post {
                 always {
-                    junit 'build/**/TEST-*.xml'
+                    junit 'build/test-results/integrationTest/TEST-*.xml'
                 }
             }
         }
