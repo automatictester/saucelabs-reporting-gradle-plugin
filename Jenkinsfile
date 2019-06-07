@@ -50,6 +50,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'sauce-labs-job-creds', usernameVariable: 'SL_USER', passwordVariable: 'SL_KEY')]) {
                     sh "./gradlew clean check -x test -DSL_USER=${SL_USER} -DSL_KEY=${SL_KEY}"
                 }
+                sh 'ls -lR'
             }
             post {
                 always {
