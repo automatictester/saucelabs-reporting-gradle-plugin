@@ -65,8 +65,7 @@ public class ReportToSauceLabsTaskIntegrationTest {
     public Object[][] arrays() {
         return new Object[][]{
                 {"2.14.1"},
-                {"3.5.1"},
-                {"4.10.2"},
+                {"3.5.1"}
         };
     }
 
