@@ -64,8 +64,11 @@ public class ReportToSauceLabsTaskIntegrationTest {
     @DataProvider(name = "input")
     public Object[][] arrays() {
         return new Object[][]{
-                {"2.14.1"},
-                {"3.5.1"}
+                new Object[]{"2.14.1"},
+                new Object[]{"3.5.1"},
+                new Object[]{"4.10.3"},
+                new Object[]{"5.6.4"},
+                new Object[]{"6.2.1"}
         };
     }
 
