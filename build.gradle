@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.10.1"
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.0"
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.2"
     }
 }
 
@@ -66,9 +66,9 @@ tasks.withType(Test) {
 }
 
 dependencies {
-    implementation 'com.saucelabs:saucerest:1.0.42'
+    implementation 'com.saucelabs:saucerest:1.0.43'
     testImplementation 'org.testng:testng:7.1.1'
-    testImplementation 'org.mockito:mockito-core:3.0.0'
+    testImplementation 'org.mockito:mockito-core:3.2.4'
 }
 
 repositories {
