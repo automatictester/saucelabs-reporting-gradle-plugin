@@ -1,7 +1,5 @@
-# saucelabs-reporting-gradle-plugin
-Sauce Labs Reporting Gradle Plugin
+# Sauce Labs Reporting Gradle Plugin
 
-[![Build Status](https://travis-ci.com/automatictester/saucelabs-reporting-gradle-plugin.svg?branch=master)](https://travis-ci.com/automatictester/saucelabs-reporting-gradle-plugin)
 [![Central status](https://maven-badges.herokuapp.com/maven-central/uk.co.automatictester/saucelabs-reporting-gradle-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/uk.co.automatictester/saucelabs-reporting-gradle-plugin)
 
 Gradle plugin which reports test results back to [Sauce Labs][1].
@@ -14,6 +12,10 @@ How does this plugin work:
 - if not, it gives a warning or an error
 - it is unit test framework-agnostic, as long as produced reports are in JUnit XML format
 - it expects your test classes to be in 1-to-1 relationship with Sauce Labs sessions
+
+## Project status
+
+This project has been discontinued.
 
 ## Quick start guide
 
