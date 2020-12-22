@@ -4,7 +4,9 @@
 
 Gradle plugin which reports test results back to [Sauce Labs][1].
 
-How does this plugin work:
+## How does it work
+
+This plugin:
 - traverses recursively given location in you file system to retrieve all JUnit reports in XML format produced by your unit test framework
 - parses them looking for **SauceOnDemandSessionID**
 - reports test results back to Sauce Labs
